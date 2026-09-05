@@ -2,7 +2,7 @@
 
 Tableau de bord **non officiel** du ZEVENT 2026, en une seule page HTML. Cagnotte, audience, classements des chaînes et analyses de répartition, mis à jour en direct depuis l'API publique de l'événement.
 
-**→ [Voir la page](https://VOTRE-PSEUDO.github.io/NOM-DU-REPO/)**
+**→ [mifu999.github.io/zevent-stats](https://mifu999.github.io/zevent-stats/)**
 
 ![Aperçu](og-image.png)
 
@@ -59,11 +59,11 @@ Voici ce que donnent ces sources selon le contexte, mesuré depuis un navigateur
 
 | Source | Fichier local | Site hébergé |
 |---|---|---|
-| `r.jina.ai` | fonctionne (~410 ms) | fonctionne (~580 ms) |
-| `proxy.cors.sh` | fonctionne (~400 ms) | fonctionne (~780 ms) |
-| `proxy.corsfix.com` | refusé (origine `null`) | fonctionne (~585 ms) |
+| `proxy.cors.sh` | fonctionne (~400 ms) | fonctionne (~170 ms) |
+| `r.jina.ai` | fonctionne (~410 ms) | fonctionne (~525 ms), 401 par moments |
+| `proxy.corsfix.com` | refusé | 403 sans origine déclarée |
 | Appel direct | bloqué | bloqué |
-| `allorigins`, `codetabs` | intermittents | intermittents |
+| `cors.lol`, `allorigins`, `codetabs` | intermittents | intermittents |
 
 Héberger la page sur GitHub Pages donne donc **une source de plus** que l'ouvrir depuis le disque. C'est le mode d'emploi recommandé.
 

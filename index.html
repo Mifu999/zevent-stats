@@ -10,14 +10,18 @@
 <link rel="apple-touch-icon" href="favicon.svg">
 <link rel="mask-icon" href="favicon.svg" color="#00BD00">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://mifu999.github.io/zevent-stats/">
+<meta property="og:site_name" content="ZEVENT 2026 — Stats">
 <meta property="og:title" content="ZEVENT 2026 — Stats &amp; Classements en direct">
 <meta property="og:description" content="Cagnotte, viewers, classements des 337 chaînes, concentration des dons et analyses, mis à jour en direct depuis l'API publique du ZEVENT.">
-<meta property="og:image" content="og-image.png">
+<meta property="og:image" content="https://mifu999.github.io/zevent-stats/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ZEVENT 2026 — Stats &amp; Classements en direct">
 <meta name="twitter:description" content="Cagnotte, viewers, classements, concentration des dons et analyses, en direct depuis l'API publique du ZEVENT.">
-<meta name="twitter:image" content="og-image.png">
+<meta name="twitter:image" content="https://mifu999.github.io/zevent-stats/og-image.png">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=switzer@300,400,500,600,700,800,900&display=swap">
@@ -662,7 +666,7 @@ footer.credit .fine{display:block;margin-top:6px;font-size:12px;color:var(--l800
   </div>
 
   <div class="warn" style="margin-bottom:4px">
-    <b>Pourquoi l'appel direct échoue.</b> L'API ZEVENT ne renvoie pas d'en-tête <code>Access-Control-Allow-Origin</code>. Le navigateur bloque donc tout appel venant d'un fichier local ou d'un autre domaine. Huit sources sont lancées <b>en parallèle</b> à chaque actualisation et la première réponse exploitable est retenue : une source lente ou bloquée ne pénalise pas les autres. Si toutes échouent, un encadré apparaît en haut de page pour charger le JSON à la main en deux clics. La pastille en haut à droite indique la source réellement utilisée.
+    <b>Pourquoi l'appel direct échoue.</b> L'API ZEVENT ne renvoie pas d'en-tête <code>Access-Control-Allow-Origin</code>. Le navigateur bloque donc tout appel venant d'un fichier local ou d'un autre domaine. Dix sources sont lancées <b>en parallèle</b> à chaque actualisation et la première réponse exploitable est retenue : une source lente ou bloquée ne pénalise pas les autres. Si toutes échouent, un encadré apparaît en haut de page pour charger le JSON à la main en deux clics. La pastille en haut à droite indique la source réellement utilisée.
   </div>
 
   <div class="two">
@@ -683,7 +687,8 @@ footer.credit .fine{display:block;margin-top:6px;font-size:12px;color:var(--l800
           <option value="jina">Relais r.jina.ai</option>
           <option value="corssh">Relais cors.sh</option>
           <option value="corsfix">Relais corsfix (site hébergé)</option>
-          <option value="jinamd">Relais r.jina.ai (texte)</option>
+          <option value="corslol">Relais cors.lol</option>
+          <option value="jinat">Relais r.jina.ai (en-tête texte)</option>
           <option value="direct">Appel direct uniquement</option>
           <option value="allorigins">Relais allorigins</option>
           <option value="alljson">Relais allorigins (JSON)</option>
@@ -867,10 +872,11 @@ function extractJson(text) {
    Ordre indicatif : la récupération lance tout en parallèle et garde
    la première réponse exploitable. */
 const SOURCES = [
-  { key: 'jina', label: 'Relais r.jina.ai', build: () => [ 'https://r.jina.ai/' + bust(), { headers: { 'x-respond-with': 'text' } } ] },
-  { key: 'corssh', label: 'Relais cors.sh', build: () => [ 'https://proxy.cors.sh/' + bust(), {} ] },
+  { key: 'corssh', label: 'Relais cors.sh', build: () => [ 'https://proxy.cors.sh/' + bust(), { headers: { 'x-requested-with': 'XMLHttpRequest' } } ] },
+  { key: 'jina', label: 'Relais r.jina.ai', build: () => [ 'https://r.jina.ai/' + bust(), {} ] },
+  { key: 'corslol', label: 'Relais cors.lol', build: () => [ 'https://api.cors.lol/?url=' + API, {} ] },
   { key: 'corsfix', label: 'Relais corsfix', build: () => [ 'https://proxy.corsfix.com/?' + bust(), {} ] },
-  { key: 'jinamd', label: 'Relais r.jina.ai (texte)', build: () => [ 'https://r.jina.ai/' + bust(), {} ] },
+  { key: 'jinat', label: 'Relais r.jina.ai (en-tête texte)', build: () => [ 'https://r.jina.ai/' + bust(), { headers: { 'x-respond-with': 'text' } } ] },
   { key: 'direct', label: 'Appel direct', build: () => [ bust(), {} ] },
   { key: 'allorigins', label: 'Relais allorigins', build: () => [ 'https://api.allorigins.win/raw?url=' + encodeURIComponent(bust()), {} ] },
   { key: 'alljson', label: 'Relais allorigins (JSON)', build: () => [ 'https://api.allorigins.win/get?url=' + encodeURIComponent(bust()), {} ] },
