@@ -34,6 +34,7 @@ Le dépôt tient en quatre fichiers. Il n'y a rien à compiler, aucune dépendan
 
 ```
 index.html      la page complète (HTML, CSS et JavaScript dans un seul fichier)
+worker.js       relais CORS optionnel à déployer sur Cloudflare Workers
 favicon.svg     icône
 og-image.png    image affichée lors du partage du lien
 .nojekyll       désactive le traitement Jekyll de GitHub Pages
@@ -73,11 +74,38 @@ Ces relais sont des services publics gratuits : ils peuvent limiter le nombre de
 
 Un encadré apparaît alors en haut de page avec trois solutions :
 
-1. **Relais personnalisé** — dans la section « Données », indiquez votre propre relais. Utilisez `{url}` pour l'adresse encodée ou `{raw}` pour l'adresse telle quelle, par exemple `https://mon-relais.exemple/?target={url}`. Il rejoint automatiquement la course. Un Cloudflare Worker gratuit de quelques lignes suffit et supprime toute dépendance à un service tiers.
+1. **Relais personnalisé** — dans la section « Données », indiquez votre propre relais. Utilisez `{url}` pour l'adresse encodée ou `{raw}` pour l'adresse telle quelle, par exemple `https://mon-relais.exemple/?target={url}`. Attention : ce réglage est enregistré dans votre navigateur et ne bénéficie donc qu'à vous. Pour couvrir tous les visiteurs, voir la section « Relais dédié » ci-dessous.
 2. **Collage manuel** — ouvrez `https://zevent.fr/api/` dans un onglet, `Ctrl+A` puis `Ctrl+C`, revenez sur la page et cliquez sur « Coller depuis le presse-papier ». Le chargement d'un fichier `.json` est également possible.
 3. **Instantané conservé** — la dernière lecture réussie est enregistrée dans le navigateur. Au rechargement, la page s'affiche immédiatement avec ces données, signalées comme figées, pendant qu'elle retente le réseau.
 
 La section « Données » liste en permanence chaque source avec son état exact : réussie en tant de millisecondes, échec avec son motif, ou annulée.
+
+---
+
+## Relais dédié (recommandé)
+
+Les relais publics sont gratuits mais saturent ou disparaissent sans prévenir : au cours d'une seule journée de test, `cors.lol` a cessé de répondre entre deux essais espacés d'une minute. Un relais à vous supprime cette dépendance, et il reste gratuit.
+
+Le fichier `worker.js` du dépôt contient un Cloudflare Worker d'une trentaine de lignes qui recopie l'API en y ajoutant les en-têtes CORS manquants. Le plan gratuit offre **100 000 requêtes par jour, sans carte bancaire, sans expiration**, et autorise l'usage commercial.
+
+### Mise en place
+
+1. Créez un compte sur [dash.cloudflare.com](https://dash.cloudflare.com) — aucun domaine ni moyen de paiement n'est demandé.
+2. Dans le menu latéral, ouvrez la section **Workers** (parfois nommée « Compute » ou « Workers & Pages »), puis créez un Worker à partir du modèle de démarrage.
+3. Donnez-lui un nom, par exemple `zevent-api`, et déployez-le tel quel.
+4. Ouvrez l'éditeur de code du Worker, remplacez tout son contenu par celui de `worker.js`, puis redéployez.
+5. Notez l'adresse obtenue, de la forme `https://zevent-api.VOTRE-COMPTE.workers.dev`. Ouvrez-la dans un onglet : vous devez voir le JSON de l'API.
+6. Dans `index.html`, cherchez la ligne `const WORKER_URL = '';` près du début du script et collez-y cette adresse. Poussez le fichier.
+
+Le relais dédié passe alors en tête de la course pour **tous les visiteurs**, sans qu'ils aient quoi que ce soit à configurer. Laissé vide, il est simplement ignoré.
+
+### Ce que ça consomme
+
+Le Worker met la réponse en cache 15 secondes côté Cloudflare : mille visiteurs simultanés ne déclenchent que quatre appels par minute vers `zevent.fr`. Le quota se calcule en revanche sur les appels reçus par le Worker.
+
+Avec une actualisation toutes les 20 secondes, un visiteur consomme 180 requêtes par heure. Les 100 000 quotidiennes couvrent donc environ **550 heures de consultation cumulées par jour**, soit une vingtaine de personnes qui laisseraient la page ouverte en continu. Pour un pic d'audience, passer l'actualisation par défaut à 30 ou 60 secondes divise d'autant la consommation.
+
+Et si le quota est atteint, rien ne casse : le Worker renvoie une erreur, la course bascule sur les relais publics et la page continue de fonctionner.
 
 ---
 

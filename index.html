@@ -666,7 +666,7 @@ footer.credit .fine{display:block;margin-top:6px;font-size:12px;color:var(--l800
   </div>
 
   <div class="warn" style="margin-bottom:4px">
-    <b>Pourquoi l'appel direct échoue.</b> L'API ZEVENT ne renvoie pas d'en-tête <code>Access-Control-Allow-Origin</code>. Le navigateur bloque donc tout appel venant d'un fichier local ou d'un autre domaine. Dix sources sont lancées <b>en parallèle</b> à chaque actualisation et la première réponse exploitable est retenue : une source lente ou bloquée ne pénalise pas les autres. Si toutes échouent, un encadré apparaît en haut de page pour charger le JSON à la main en deux clics. La pastille en haut à droite indique la source réellement utilisée.
+    <b>Pourquoi l'appel direct échoue.</b> L'API ZEVENT ne renvoie pas d'en-tête <code>Access-Control-Allow-Origin</code>. Le navigateur bloque donc tout appel venant d'un fichier local ou d'un autre domaine. Toutes les sources disponibles sont lancées <b>en parallèle</b> à chaque actualisation et la première réponse exploitable est retenue : une source lente ou bloquée ne pénalise pas les autres. Si toutes échouent, un encadré apparaît en haut de page pour charger le JSON à la main en deux clics. La pastille en haut à droite indique la source réellement utilisée.
   </div>
 
   <div class="two">
@@ -684,6 +684,7 @@ footer.credit .fine{display:block;margin-top:6px;font-size:12px;color:var(--l800
         </select>
         <select class="sel" id="srcSel" aria-label="Source des données">
           <option value="auto">Toutes les sources en parallèle</option>
+          <option value="worker">Relais dédié</option>
           <option value="jina">Relais r.jina.ai</option>
           <option value="corssh">Relais cors.sh</option>
           <option value="corsfix">Relais corsfix (site hébergé)</option>
@@ -857,6 +858,15 @@ const S = {
 const API = 'https://zevent.fr/api/';
 const bust = () => API + '?_=' + Date.now();
 
+/* ------------------------------------------------------------------
+   RELAIS DÉDIÉ — à renseigner pour que TOUS les visiteurs en profitent.
+   Collez ici l'adresse de votre Cloudflare Worker (voir worker.js et le
+   README). Laissée vide, la page se rabat sur les relais publics, qui
+   sont gratuits mais saturent ou tombent sans prévenir.
+   Exemple : 'https://zevent-api.mon-compte.workers.dev/'
+   ------------------------------------------------------------------ */
+const WORKER_URL = '';
+
 /* Extrait un objet JSON d'un texte qui peut contenir autre chose autour. */
 function extractJson(text) {
   const t = String(text).trim();
@@ -872,6 +882,11 @@ function extractJson(text) {
    Ordre indicatif : la récupération lance tout en parallèle et garde
    la première réponse exploitable. */
 const SOURCES = [
+  { key: 'worker', label: 'Relais dédié', dedicated: true, build: () => {
+      const u = WORKER_URL.trim();
+      if (!u) throw new Error('aucun relais dédié configuré');
+      return [ u + (u.includes('?') ? '&' : '?') + '_=' + Date.now(), {} ];
+  } },
   { key: 'corssh', label: 'Relais cors.sh', build: () => [ 'https://proxy.cors.sh/' + bust(), { headers: { 'x-requested-with': 'XMLHttpRequest' } } ] },
   { key: 'jina', label: 'Relais r.jina.ai', build: () => [ 'https://r.jina.ai/' + bust(), {} ] },
   { key: 'corslol', label: 'Relais cors.lol', build: () => [ 'https://api.cors.lol/?url=' + API, {} ] },
@@ -915,13 +930,13 @@ async function fetchData(manualTrigger) {
   S.inFlight = true;
   S.lastTry = Date.now();
   S.attempts = SOURCES
-    .filter(s => (S.forcedSource === 'auto' || s.key === S.forcedSource) && (!s.custom || (store.get('ze.custom') || '').trim()))
+    .filter(s => (S.forcedSource === 'auto' || s.key === S.forcedSource) && (!s.custom || (store.get('ze.custom') || '').trim()) && (!s.dedicated || WORKER_URL.trim()))
     .map(s => ({ key: s.key, label: s.label, state: 'en cours' }));
 
   setStatus('warn', manualTrigger ? 'Actualisation…' : 'Mise à jour…');
   renderNet();
 
-  const list = SOURCES.filter(s => (S.forcedSource === 'auto' || s.key === S.forcedSource) && (!s.custom || (store.get('ze.custom') || '').trim()));
+  const list = SOURCES.filter(s => (S.forcedSource === 'auto' || s.key === S.forcedSource) && (!s.custom || (store.get('ze.custom') || '').trim()) && (!s.dedicated || WORKER_URL.trim()));
   if (!list.length) { S.inFlight = false; renderNet(); return; }
 
   const ctl = new AbortController();
