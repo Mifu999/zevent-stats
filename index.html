@@ -1,0 +1,2190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEVENT 2026 — Stats & Classements en direct</title>
+<meta name="description" content="Tableau de bord non officiel du ZEVENT 2026 : cagnotte, viewers, classements, concentration des dons et analyses, mis à jour en direct depuis l'API publique zevent.fr/api/.">
+<meta name="theme-color" content="#111111">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20width%3D%22256%22%20height%3D%22256%22%20viewBox%3D%220%200%20256%20256%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22256%22%20height%3D%22256%22%20rx%3D%2251%22%20fill%3D%22%23111111%22%2F%3E%3Cpath%20d%3D%22M69%20158.186C69.4992%20157.779%2070.0371%20157.408%2070.4918%20156.955C76.7785%20150.723%2083.0593%20144.487%2089.3305%20138.241C101.691%20125.933%20114.042%20113.619%20126.404%20101.311C127.246%20100.472%20128.169%2099.6915%20127.48%2098.0276C122.95%2097.9561%20118.291%2098.0063%20113.631%2097.9967C108.943%2097.987%20104.253%2097.9947%2099.5644%2097.9947H85.6947H71.7109C71.2948%2096.4294%2071.1594%2061.1418%2071.5135%2058.3204C72.9995%2057.9223%20184.79%2057.872%20186.787%2058.3011C186.83%2058.819%20186.913%2059.3833%20186.913%2059.9456C186.921%2072.1107%20186.909%2084.2759%20186.936%2096.4391C186.938%2097.4865%20186.663%2098.2634%20185.903%2099.017C171.488%20113.32%20157.096%20127.641%20142.702%20141.965C138.319%20146.327%20133.964%20150.715%20129.57%20155.064C128.743%20155.883%20128.37%20156.722%20128.927%20158.059H186.837C186.868%20159.029%20186.915%20159.783%20186.915%20160.534C186.921%20172.244%20186.917%20183.955%20186.923%20195.664C186.923%20196.442%20186.973%20197.221%20187%20198H69V158.186Z%22%20fill%3D%22white%22%2F%3E%3C%2Fsvg%3E">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="mask-icon" href="favicon.svg" color="#00BD00">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ZEVENT 2026 — Stats &amp; Classements en direct">
+<meta property="og:description" content="Cagnotte, viewers, classements des 337 chaînes, concentration des dons et analyses, mis à jour en direct depuis l'API publique du ZEVENT.">
+<meta property="og:image" content="og-image.png">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ZEVENT 2026 — Stats &amp; Classements en direct">
+<meta name="twitter:description" content="Cagnotte, viewers, classements, concentration des dons et analyses, en direct depuis l'API publique du ZEVENT.">
+<meta name="twitter:image" content="og-image.png">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=switzer@300,400,500,600,700,800,900&display=swap">
+<style>
+/* ============================================================
+   ZEVENT 2026 — Tableau de bord de stats (non officiel)
+   Palette + typo extraites du CSS de production de zevent.fr
+   ============================================================ */
+:root{
+  --p200:#99E499; --p300:#66D766; --p400:#33CA33; --p500:#00BD00;
+  --p600:#009700; --p700:#007100; --p800:#004B00; --p900:#002500;
+  --d100:#313131; --d150:#383838; --d200:#262626; --d300:#1D1D1D; --d400:#171717;
+  --d500:#111111; --d600:#0E0E0E; --d700:#080808; --d800:#060606; --d900:#000000;
+  --l100:#FFFFFF; --l200:#E6E6E6; --l300:#CDCDCD; --l500:#9C9C9C;
+  --l600:#838383; --l700:#6A6A6A; --l800:#515151;
+  --gold:#E7B22B; --goldL:#FFE095; --goldM:#EFCB73; --goldD:#A67C00; --goldDD:#7E5E00;
+  --lan:#00BD00; --online:#5B9BFF; --danger:#EF4444;
+  --r:8px; --r-lg:12px; --r-xl:16px;
+  --bar-h:64px;
+  --ff:'Switzer','Switzer Variable',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:96px}
+body{
+  margin:0;background:var(--d900);color:var(--l100);font-family:var(--ff);
+  font-size:15px;line-height:1.5;font-weight:400;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  padding:4px 4px calc(var(--bar-h) + 26px);
+  min-height:100vh;overflow-x:hidden;
+}
+/* halo vert diffus derrière le contenu, comme le fond du site */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 50% -8%,rgba(0,189,0,.13),transparent 62%),
+    radial-gradient(700px 420px at 12% 30%,rgba(0,189,0,.05),transparent 60%),
+    radial-gradient(700px 420px at 88% 66%,rgba(0,189,0,.05),transparent 60%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+#app{position:relative;z-index:1;max-width:1600px;margin:0 auto}
+::selection{background:var(--p800);color:var(--l100)}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--p500);outline-offset:2px;border-radius:4px}
+.hide-sb{scrollbar-width:thin;scrollbar-color:var(--d200) transparent}
+.hide-sb::-webkit-scrollbar{width:8px;height:8px}
+.hide-sb::-webkit-scrollbar-thumb{background:var(--d200);border-radius:8px}
+.hide-sb::-webkit-scrollbar-track{background:transparent}
+.tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Header ---------- */
+header.top{
+  background:var(--d600);border-radius:var(--r-xl);
+  padding:12px 12px 12px 16px;margin-bottom:4px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:relative;min-height:64px;
+}
+.logo{width:150px;height:auto;display:block;image-rendering:auto}
+.logo-wrap{position:absolute;left:50%;top:6px;transform:translateX(-50%)}
+nav.main{display:flex;gap:18px;font-size:14px;font-weight:600;flex-wrap:wrap}
+nav.main a{color:var(--l500);transition:color .15s}
+nav.main a:hover{color:var(--p500)}
+nav.main a.on{color:var(--p500)}
+.head-right{display:flex;align-items:center;gap:10px}
+.src-pill{
+  display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 11px;
+  background:var(--d700);border:1px solid var(--d300);border-radius:999px;
+  font-size:12px;font-weight:600;color:var(--l500);white-space:nowrap;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--l800);flex:none}
+.dot.ok{background:var(--p500);box-shadow:0 0 0 3px var(--p900)}
+.dot.warn{background:var(--gold);box-shadow:0 0 0 3px rgba(231,178,43,.18)}
+.dot.err{background:var(--danger);box-shadow:0 0 0 3px rgba(239,68,68,.18)}
+.dot.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ---------- Boutons (repris du site : dégradé + inset 3D) ---------- */
+.btn{
+  height:38px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:0 15px;border-radius:var(--r);font-weight:600;font-size:14px;
+  border:1px solid var(--d500);cursor:pointer;white-space:nowrap;
+  background:linear-gradient(180deg,var(--d100),var(--d200) 50%,var(--d300));
+  box-shadow:inset 0 2px 0 var(--d150),inset 0 -2px 0 var(--d400);
+  color:var(--l200);transition:filter .15s,transform .05s;
+}
+.btn:hover{filter:brightness(1.35)}
+.btn:active{transform:translateY(1px)}
+.btn.sm{height:30px;font-size:12.5px;padding:0 10px;border-radius:6px}
+.btn.p{
+  background:linear-gradient(180deg,var(--p400),var(--p500) 50%,var(--p600));
+  border-color:var(--p700);box-shadow:inset 0 2px 0 var(--p300),inset 0 -2px 0 var(--p700);
+  color:var(--d900);
+}
+.btn.g{
+  background:linear-gradient(180deg,var(--goldL),var(--goldM) 50%,var(--gold));
+  border-color:var(--goldD);box-shadow:inset 0 2px 0 #FAFAFA,inset 0 -2px 0 var(--goldDD);
+  color:var(--d900);
+}
+.btn[aria-pressed="true"]{
+  background:linear-gradient(180deg,var(--p400),var(--p500) 50%,var(--p600));
+  border-color:var(--p700);box-shadow:inset 0 2px 0 var(--p300),inset 0 -2px 0 var(--p700);
+  color:var(--d900);
+}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+
+/* ---------- Cartes & sections ---------- */
+.card{background:var(--d700);border:1px solid var(--d300);border-radius:var(--r-lg)}
+section.blk{
+  background:var(--d800);border:1px solid var(--d300);border-radius:var(--r-xl);
+  padding:22px;margin-bottom:4px;
+}
+.h2{font-size:22px;font-weight:700;letter-spacing:-.015em;margin:0 0 3px}
+.sub{font-size:13px;color:var(--l600);margin:0 0 18px;max-width:74ch}
+.h3{font-size:15px;font-weight:700;margin:0 0 2px}
+.blk-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.blk-head .sub{margin:0}
+.grid{display:grid;gap:4px}
+
+/* ---------- Hero cagnotte ---------- */
+.hero{
+  background:
+    radial-gradient(760px 300px at 50% 0%,rgba(0,189,0,.16),transparent 68%),
+    var(--d800);
+  border:1px solid var(--d300);border-radius:var(--r-xl);
+  padding:34px 22px 22px;margin-bottom:4px;overflow:hidden;position:relative;
+}
+.hero-label{
+  font-size:13px;color:var(--l500);font-weight:600;text-align:center;margin-bottom:6px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.pot{
+  text-align:center;font-weight:800;line-height:.95;letter-spacing:-.035em;
+  font-size:clamp(44px,10.5vw,116px);
+  color:var(--p500);
+  text-shadow:0 0 60px rgba(0,189,0,.42),0 0 14px rgba(0,189,0,.18);
+  margin:0;
+}
+.pot .cents{font-size:.42em;color:var(--p300);letter-spacing:-.02em;vertical-align:.16em}
+.pot .cur{font-size:.5em;color:var(--p300);margin-left:.06em;vertical-align:.1em}
+.hero-note{text-align:center;font-size:13px;color:var(--l600);margin-top:8px}
+.hero-note b{color:var(--l300);font-weight:600}
+.spark{width:100%;height:76px;display:block;margin-top:14px}
+.hero-kpis{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px;margin-top:18px;
+}
+.kpi{
+  background:var(--d700);border:1px solid var(--d300);border-radius:var(--r);
+  padding:12px 14px;min-width:0;
+}
+.kpi .k{font-size:12px;color:var(--l600);font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.kpi .v{font-size:23px;font-weight:700;letter-spacing:-.02em;line-height:1.15;word-break:break-word}
+.kpi .d{font-size:11.5px;color:var(--l700);margin-top:2px;min-height:14px}
+.kpi.acc .v{color:var(--p500)}
+.kpi.gold .v{color:var(--gold)}
+.up{color:var(--p500)} .down{color:var(--danger)}
+
+/* ---------- Tuiles stats ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:4px}
+.tile{
+  background:var(--d700);border:1px solid var(--d300);border-radius:var(--r);
+  padding:13px 14px;min-width:0;
+}
+.tile .t{font-size:11.5px;color:var(--l600);font-weight:600;margin-bottom:4px;line-height:1.3}
+.tile .n{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.tile .n.sm{font-size:16px}
+.tile .h{font-size:11px;color:var(--l700);margin-top:3px;line-height:1.35}
+
+/* ---------- Barres de progression ---------- */
+.bar{height:7px;background:var(--d300);border-radius:99px;overflow:hidden;margin-top:7px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--p700),var(--p500));border-radius:99px;transition:width .55s cubic-bezier(.22,1,.36,1)}
+.bar.blue>i{background:linear-gradient(90deg,#2E5FA8,var(--online))}
+.bar.gold>i{background:linear-gradient(90deg,var(--goldD),var(--gold))}
+
+/* ---------- Podium ---------- */
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;align-items:end;margin-bottom:4px}
+.pod{
+  background:var(--d700);border:1px solid var(--d300);border-radius:var(--r-lg);
+  padding:16px 14px;text-align:center;position:relative;overflow:hidden;
+}
+.pod::before{content:'';position:absolute;inset:0 0 auto;height:3px}
+.pod.r1::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.pod.r2::before{background:linear-gradient(90deg,transparent,#C9CDD4,transparent)}
+.pod.r3::before{background:linear-gradient(90deg,transparent,#C08457,transparent)}
+.pod.r1{padding-top:26px;padding-bottom:24px;border-color:rgba(231,178,43,.34);background:radial-gradient(200px 90px at 50% 0,rgba(231,178,43,.09),transparent 70%),var(--d700)}
+.pod .rk{font-size:11px;font-weight:700;color:var(--l600);margin-bottom:9px}
+.pod.r1 .rk{color:var(--gold)}
+.pod img{width:62px;height:62px;border-radius:var(--r);border:1px solid var(--d100);object-fit:cover;background:var(--d300);display:block;margin:0 auto 9px}
+.pod.r1 img{width:78px;height:78px;border-color:rgba(231,178,43,.5)}
+.pod .nm{font-weight:700;font-size:15px;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .am{font-size:19px;font-weight:800;color:var(--p500);letter-spacing:-.02em}
+.pod.r1 .am{font-size:25px}
+.pod .mt{font-size:11.5px;color:var(--l600);margin-top:5px}
+
+/* ---------- Carte streamer (structure du site officiel) ---------- */
+.slist{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:4px}
+.srow{
+  border-radius:var(--r);padding:8px;background:var(--d700);border:1px solid var(--d300);
+  display:flex;gap:12px;align-items:center;overflow:hidden;min-height:56px;
+  cursor:pointer;transition:background .15s,border-color .15s;text-align:left;width:100%;
+}
+.srow:hover{background:var(--d300);border-color:var(--d100)}
+.srow>img{width:40px;height:40px;flex:none;border-radius:6px;border:1px solid var(--d100);object-fit:cover;background:var(--d300)}
+.srow .mid{flex:1;min-width:0}
+.srow .nm{font-size:14px;font-weight:600;margin-bottom:2px;display:flex;gap:5px;align-items:center;min-width:0}
+.srow .nm>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .meta{display:flex;align-items:center;gap:7px;min-width:0}
+.srow .game{font-size:12px;color:var(--l600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:96px}
+.eur{background:var(--p900);color:var(--p500);font-size:12px;padding:1px 5px;border-radius:4px;white-space:nowrap;font-weight:500}
+.srow .right{margin-right:6px;display:flex;align-items:center;gap:6px;flex:none}
+.srow .vw{font-size:12px;color:var(--l600);white-space:nowrap}
+.livedot{width:4px;height:4px;border-radius:50%;background:var(--p500);border:2px solid var(--p800);box-sizing:content-box;flex:none}
+.livedot.off{background:var(--l800);border-color:var(--d200)}
+.rkbadge{
+  font-size:11px;font-weight:700;color:var(--l600);background:var(--d300);
+  border-radius:5px;padding:2px 5px;flex:none;min-width:30px;text-align:center;
+}
+.rkbadge.top1{background:rgba(231,178,43,.16);color:var(--gold)}
+.rkbadge.top3{background:rgba(201,205,212,.13);color:#C9CDD4}
+.rkbadge.top10{background:var(--p900);color:var(--p400)}
+.pin{color:var(--l700);flex:none;display:inline-flex}
+.pin svg{display:block}
+.pin.on{color:var(--p600)}
+
+/* ---------- Barre d'outils ---------- */
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.search{
+  height:38px;display:flex;align-items:center;gap:8px;padding:0 12px;flex:1 1 230px;min-width:180px;
+  border:1px solid var(--d300);border-radius:var(--r);background:var(--d800);transition:border-color .15s;
+}
+.search:focus-within{border-color:var(--p700)}
+.search input{flex:1;background:transparent;border:0;outline:0;font-size:14px;min-width:0}
+.search input::placeholder{color:var(--l800)}
+.sel{
+  height:38px;padding:0 32px 0 12px;border-radius:var(--r);background:var(--d800);
+  border:1px solid var(--d300);font-size:13.5px;font-weight:600;cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 8l5 5 5-5' stroke='%239C9C9C' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center;
+}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.cnt{font-size:13px;color:var(--l600);margin-left:auto;white-space:nowrap;font-weight:600}
+
+/* ---------- Tableau ---------- */
+.tw{overflow:auto;border:1px solid var(--d300);border-radius:var(--r-lg);max-height:660px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead th{
+  position:sticky;top:0;background:var(--d600);z-index:2;text-align:left;
+  padding:10px 12px;font-weight:700;font-size:12px;color:var(--l500);
+  border-bottom:1px solid var(--d300);white-space:nowrap;cursor:pointer;user-select:none;
+}
+thead th:hover{color:var(--p500)}
+thead th.na{cursor:default}thead th.na:hover{color:var(--l500)}
+thead th .ar{opacity:.35;margin-left:3px}
+thead th.act{color:var(--p500)}thead th.act .ar{opacity:1}
+tbody td{padding:8px 12px;border-bottom:1px solid var(--d400);white-space:nowrap}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--d700)}
+tbody tr:last-child td{border-bottom:0}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td .cellname{display:flex;align-items:center;gap:9px;min-width:0}
+td .cellname img{width:26px;height:26px;border-radius:5px;border:1px solid var(--d200);flex:none;object-fit:cover;background:var(--d300)}
+
+/* ---------- Graphiques ---------- */
+.chart{width:100%;display:block;overflow:visible}
+svg text{font-family:var(--ff);font-weight:500}
+.chart-box{background:var(--d700);border:1px solid var(--d300);border-radius:var(--r-lg);padding:16px}
+.chart-box h4{margin:0 0 2px;font-size:14px;font-weight:700}
+.chart-box p.cd{margin:0 0 14px;font-size:12px;color:var(--l600);line-height:1.45}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--l500);margin-top:10px}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:-1px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:4px}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:4px}
+.tipbox{
+  position:fixed;z-index:90;pointer-events:none;opacity:0;transition:opacity .12s;
+  background:var(--d900);border:1px solid var(--d100);border-radius:6px;
+  padding:7px 10px;font-size:12px;line-height:1.5;box-shadow:0 8px 26px rgba(0,0,0,.75);max-width:250px;
+}
+.tipbox b{color:var(--p500)}
+
+/* ---------- Journal direct ---------- */
+.log{max-height:430px;overflow:auto;display:flex;flex-direction:column;gap:3px}
+.ev{
+  display:flex;gap:10px;align-items:center;padding:8px 11px;background:var(--d700);
+  border:1px solid var(--d300);border-radius:var(--r);font-size:13px;
+}
+.ev .tm{font-size:11.5px;color:var(--l700);flex:none;font-variant-numeric:tabular-nums;width:60px}
+.ev .ic{width:22px;height:22px;border-radius:5px;display:grid;place-items:center;flex:none;font-size:12px;font-weight:700}
+.ev .tx{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ev.on .ic{background:var(--p900);color:var(--p400)}
+.ev.off .ic{background:var(--d200);color:var(--l600)}
+.ev.don .ic{background:rgba(231,178,43,.15);color:var(--gold)}
+.ev.game .ic{background:rgba(91,155,255,.14);color:var(--online)}
+.ev.sys .ic{background:var(--d200);color:var(--l500)}
+.ev b{font-weight:600}
+.empty{padding:26px;text-align:center;color:var(--l700);font-size:13px;border:1px dashed var(--d200);border-radius:var(--r-lg)}
+
+/* ---------- Barre flottante ---------- */
+.bottom{
+  position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:60;
+  display:flex;align-items:center;gap:8px;padding:8px;max-width:calc(100vw - 16px);
+  background:rgba(6,6,6,.9);backdrop-filter:blur(14px) saturate(150%);
+  -webkit-backdrop-filter:blur(14px) saturate(150%);
+  border:1px solid var(--d300);border-radius:var(--r-xl);
+  box-shadow:0 10px 40px rgba(0,0,0,.7);overflow-x:auto;scrollbar-width:none;
+}
+.bottom::-webkit-scrollbar{display:none}
+.bstat{display:flex;align-items:center;gap:7px;padding:0 10px;font-size:13px;font-weight:600;white-space:nowrap;flex:none}
+.bstat svg{flex:none}
+.bsep{width:1px;height:24px;background:var(--d200);flex:none}
+.ring{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:2.5}
+.ring .bg{stroke:var(--d200)}
+.ring .fg{stroke:var(--p500);stroke-linecap:round;transition:stroke-dashoffset .95s linear}
+
+/* ---------- Modale ---------- */
+.ovl{
+  position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.82);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  display:grid;place-items:center;padding:14px;opacity:0;pointer-events:none;transition:opacity .18s;
+}
+.ovl.open{opacity:1;pointer-events:auto}
+.modal{
+  width:min(620px,100%);max-height:88vh;overflow:auto;background:var(--d800);
+  border:1px solid var(--d200);border-radius:var(--r-xl);padding:22px;
+  transform:translateY(10px) scale(.985);transition:transform .18s;
+}
+.ovl.open .modal{transform:none}
+.mhead{display:flex;gap:15px;align-items:center;margin-bottom:18px}
+.mhead img{width:76px;height:76px;border-radius:var(--r-lg);border:1px solid var(--d100);object-fit:cover;background:var(--d300);flex:none}
+.mhead .n{font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.mhead .u{font-size:13px;color:var(--l600)}
+.mstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:4px;margin-bottom:16px}
+.close{
+  margin-left:auto;width:32px;height:32px;border-radius:var(--r);flex:none;
+  border:1px solid var(--d300);background:var(--d700);cursor:pointer;color:var(--l500);
+  display:grid;place-items:center;font-size:17px;line-height:1;align-self:flex-start;
+}
+.close:hover{color:var(--l100);background:var(--d300)}
+.mlinks{display:flex;gap:6px;flex-wrap:wrap}
+.note{font-size:12px;color:var(--l700);line-height:1.55;margin-top:14px}
+.note code{background:var(--d700);border:1px solid var(--d300);border-radius:4px;padding:1px 5px;font-size:11.5px;color:var(--l300)}
+textarea{
+  width:100%;min-height:120px;background:var(--d900);border:1px solid var(--d300);
+  border-radius:var(--r);padding:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12px;color:var(--l300);resize:vertical;outline:0;
+}
+textarea:focus{border-color:var(--p700)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:13px;align-items:baseline}
+.kv dt{color:var(--l600);font-weight:600;white-space:nowrap}
+.kv dd{margin:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.warn{
+  background:rgba(231,178,43,.07);border:1px solid rgba(231,178,43,.3);
+  border-radius:var(--r);padding:12px 14px;font-size:13px;color:var(--goldM);line-height:1.55;
+}
+.warn b{color:var(--goldL)}
+footer.credit{
+  text-align:center;padding:26px 18px 10px;font-size:13px;color:var(--l700);line-height:1.7;
+}
+footer.credit a{color:var(--p500);font-weight:600;transition:color .15s}
+footer.credit a:hover{color:var(--p300);text-decoration:underline}
+footer.credit .sep{color:var(--d100);margin:0 9px}
+footer.credit .fine{display:block;margin-top:6px;font-size:12px;color:var(--l800)}
+.flash{animation:flash 1.1s ease-out}
+@keyframes flash{0%{background:var(--p900);border-color:var(--p700)}100%{background:var(--d700);border-color:var(--d300)}}
+@media (max-width:900px){
+  .logo-wrap{position:static;transform:none}
+  header.top{flex-direction:column;align-items:stretch;gap:12px;padding:12px}
+  .logo{margin:0 auto}
+  nav.main{justify-content:center;gap:14px}
+  .head-right{justify-content:center}
+  .podium{grid-template-columns:1fr}
+  .pod.r1{order:-1}
+  section.blk{padding:16px}
+  .hero{padding:26px 14px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header class="top">
+  <nav class="main" aria-label="Navigation des sections">
+    <a href="#resume" class="on">Résumé</a>
+    <a href="#classements">Classements</a>
+    <a href="#streamers">Streamers</a>
+    <a href="#analyses">Analyses</a>
+    <a href="#jeux">Jeux</a>
+    <a href="#direct">Direct</a>
+    <a href="#donnees">Données</a>
+  </nav>
+  <div class="logo-wrap"><img class="logo" alt="ZEVENT 2026" src="data:image/webp;base64,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"></div>
+  <div class="head-right">
+    <span class="src-pill" id="srcPill" title="Origine des données affichées">
+      <span class="dot pulse" id="srcDot"></span><span id="srcTxt">Connexion…</span>
+    </span>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <p class="hero-label"><span class="dot ok pulse"></span>Cagnotte ZEVENT 2026</p>
+  <p class="pot tnum" id="pot" aria-live="polite">— <span class="cur">€</span></p>
+  <p class="hero-note" id="potNote">Chargement des données depuis l'API publique du ZEVENT…</p>
+  <svg class="spark" id="spark" viewBox="0 0 1000 76" preserveAspectRatio="none" aria-hidden="true"></svg>
+  <div class="hero-kpis">
+    <div class="kpi acc"><div class="k">Viewers cumulés</div><div class="v tnum" id="kViewers">—</div><div class="d" id="kViewersD"></div></div>
+    <div class="kpi"><div class="k">Chaînes en live</div><div class="v tnum" id="kLive">—</div><div class="d" id="kLiveD"></div></div>
+    <div class="kpi gold"><div class="k">Collecte récente</div><div class="v tnum" id="kRate">—</div><div class="d" id="kRateD">Mesurée depuis l'ouverture</div></div>
+    <div class="kpi"><div class="k">Don moyen par viewer</div><div class="v tnum" id="kPerV">—</div><div class="d">Cagnotte ÷ viewers actuels</div></div>
+    <div class="kpi"><div class="k">Sur place / à distance</div><div class="v tnum" id="kLan">—</div><div class="d" id="kLanD"></div></div>
+  </div>
+</div>
+
+<!-- ================= RÉSUMÉ ================= -->
+<section class="blk" id="resume">
+  <div class="blk-head">
+    <div>
+      <h2 class="h2">Résumé chiffré</h2>
+      <p class="sub">Tout ce que l'API expose à cet instant, agrégé. Les valeurs marquées « session » sont calculées par cette page depuis son ouverture : l'API ne fournit aucun historique.</p>
+    </div>
+    <button class="btn sm" id="btnRefresh">Actualiser maintenant</button>
+  </div>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="two" style="margin-top:4px">
+    <div class="chart-box">
+      <h4>Où va la cagnotte</h4>
+      <p class="cd">Somme des compteurs individuels comparée au total annoncé. L'écart correspond aux dons faits sur la cagnotte globale, sans streamer associé.</p>
+      <div id="splitBars"></div>
+    </div>
+    <div class="chart-box">
+      <h4>Sur place contre à distance</h4>
+      <p class="cd">Les streamers présents à la LAN et ceux qui participent depuis chez eux, comparés sur trois mesures.</p>
+      <div id="lanBars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLASSEMENTS ================= -->
+<section class="blk" id="classements">
+  <div class="blk-head">
+    <div>
+      <h2 class="h2">Classements</h2>
+      <p class="sub">Le podium et le top 20 suivent le critère choisi. Cliquez sur un streamer pour ouvrir sa fiche détaillée.</p>
+    </div>
+    <div class="chips" id="rankChips">
+      <button class="btn sm" data-rank="don" aria-pressed="true">Dons</button>
+      <button class="btn sm" data-rank="viewers" aria-pressed="false">Viewers</button>
+      <button class="btn sm" data-rank="ratio" aria-pressed="false">€ par viewer</button>
+      <button class="btn sm" data-rank="lan" aria-pressed="false">Dons — sur place</button>
+      <button class="btn sm" data-rank="online" aria-pressed="false">Dons — à distance</button>
+    </div>
+  </div>
+  <div class="podium" id="podium"></div>
+  <div class="two">
+    <div class="chart-box">
+      <h4 id="topTitle">Top 20</h4>
+      <p class="cd" id="topDesc"></p>
+      <div id="topBars"></div>
+    </div>
+    <div class="chart-box">
+      <h4 id="nextTitle">Places 21 à 40</h4>
+      <p class="cd" id="nextDesc">La suite immédiate du classement, sur le même critère.</p>
+      <div id="nextBars"></div>
+    </div>
+  </div>
+  <div class="chart-box" style="margin-top:4px">
+    <h4>Progression pendant la session</h4>
+    <p class="cd">Chaînes ayant le plus progressé depuis l'ouverture de la page. Cette liste reste vide tant qu'aucun don n'a été observé en direct.</p>
+    <div id="movers"></div>
+  </div>
+</section>
+
+<!-- ================= STREAMERS ================= -->
+<section class="blk" id="streamers">
+  <div class="blk-head">
+    <div>
+      <h2 class="h2">Tous les streamers</h2>
+      <p class="sub">Recherche, filtres et tri sur l'intégralité de la liste renvoyée par l'API.</p>
+    </div>
+  </div>
+  <div class="tools">
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="8.5" cy="8.5" r="4.5" stroke="#515151" stroke-width="1.5"/><path d="M16 16L12 12" stroke="#515151" stroke-width="1.5"/></svg>
+      <input type="search" id="q" placeholder="Rechercher un streamer" autocomplete="off" aria-label="Rechercher un streamer">
+    </label>
+    <div class="chips">
+      <button class="btn sm" data-loc="all" aria-pressed="true">Tous</button>
+      <button class="btn sm" data-loc="LAN" aria-pressed="false">Sur place</button>
+      <button class="btn sm" data-loc="Online" aria-pressed="false">À distance</button>
+    </div>
+    <div class="chips">
+      <button class="btn sm" data-st="all" aria-pressed="true">Live et hors ligne</button>
+      <button class="btn sm" data-st="live" aria-pressed="false">En live</button>
+      <button class="btn sm" data-st="off" aria-pressed="false">Hors ligne</button>
+    </div>
+    <select class="sel" id="gameFilter" aria-label="Filtrer par jeu"><option value="">Tous les jeux</option></select>
+    <select class="sel" id="sortSel" aria-label="Trier la liste">
+      <option value="don">Dons décroissants</option>
+      <option value="donAsc">Dons croissants</option>
+      <option value="viewers">Viewers décroissants</option>
+      <option value="viewersAsc">Viewers croissants</option>
+      <option value="ratio">€ par viewer</option>
+      <option value="name">Nom A → Z</option>
+      <option value="nameDesc">Nom Z → A</option>
+    </select>
+    <div class="chips">
+      <button class="btn sm" id="viewGrid" aria-pressed="true">Grille</button>
+      <button class="btn sm" id="viewTable" aria-pressed="false">Tableau</button>
+    </div>
+    <span class="cnt" id="listCount"></span>
+  </div>
+  <div id="gridWrap"><div class="slist" id="slist"></div></div>
+  <div id="tableWrap" style="display:none" class="tw hide-sb">
+    <table id="stable">
+      <thead><tr>
+        <th class="na">#</th>
+        <th data-sort="name">Streamer<span class="ar">↕</span></th>
+        <th data-sort="don" class="act">Dons<span class="ar">↓</span></th>
+        <th data-sort="viewers">Viewers<span class="ar">↕</span></th>
+        <th data-sort="ratio">€ / viewer<span class="ar">↕</span></th>
+        <th data-sort="share">Part cagnotte<span class="ar">↕</span></th>
+        <th class="na">Jeu</th>
+        <th class="na">Lieu</th>
+        <th class="na">Statut</th>
+      </tr></thead>
+      <tbody id="stbody"></tbody>
+    </table>
+  </div>
+  <p class="note" id="listNote"></p>
+</section>
+
+<!-- ================= ANALYSES ================= -->
+<section class="blk" id="analyses">
+  <div class="blk-head">
+    <div>
+      <h2 class="h2">Analyses de la répartition</h2>
+      <p class="sub">Comment la cagnotte et l'audience se répartissent entre les 337 chaînes. Toutes ces mesures sont recalculées à chaque actualisation.</p>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="chart-box">
+      <h4>Concentration des dons</h4>
+      <p class="cd">Courbe de Lorenz : l'axe horizontal empile les streamers du plus petit au plus gros collecteur, l'axe vertical la part de cagnotte atteinte. Plus la courbe s'éloigne de la diagonale, plus la collecte est concentrée sur quelques chaînes.</p>
+      <svg class="chart" id="lorenz" viewBox="0 0 420 300" aria-hidden="true"></svg>
+      <div class="legend"><span><i style="background:var(--p500)"></i>Dons</span><span><i style="background:var(--online)"></i>Viewers</span><span><i style="background:var(--l800)"></i>Répartition parfaitement égale</span></div>
+      <dl class="kv" id="giniKv" style="margin-top:14px"></dl>
+    </div>
+    <div class="chart-box">
+      <h4>Part cumulée du haut de classement</h4>
+      <p class="cd">Quelle fraction de la cagnotte représentent les meilleurs collecteurs, et combien de chaînes il faut additionner pour franchir chaque seuil.</p>
+      <div id="paretoBars"></div>
+      <dl class="kv" id="paretoKv" style="margin-top:14px"></dl>
+    </div>
+  </div>
+
+  <div class="two" style="margin-top:4px">
+    <div class="chart-box">
+      <h4>Audience et dons, chaîne par chaîne</h4>
+      <p class="cd">Un point par streamer en live, échelles logarithmiques. Un point haut et à gauche collecte beaucoup avec peu de spectateurs.</p>
+      <svg class="chart" id="scatter" viewBox="0 0 420 300"></svg>
+      <div class="legend"><span><i style="background:var(--p500)"></i>Sur place</span><span><i style="background:var(--online)"></i>À distance</span></div>
+      <dl class="kv" id="corrKv" style="margin-top:14px"></dl>
+      <p class="note" id="corrNote"></p>
+    </div>
+    <div class="chart-box">
+      <h4>Distribution des montants</h4>
+      <p class="cd">Nombre de streamers par tranche de collecte, et poids de chaque tranche dans la cagnotte totale.</p>
+      <div id="histDon"></div>
+    </div>
+  </div>
+
+  <div class="two" style="margin-top:4px">
+    <div class="chart-box">
+      <h4>Distribution de l'audience</h4>
+      <p class="cd">Répartition des chaînes en live par palier de spectateurs.</p>
+      <div id="histView"></div>
+    </div>
+    <div class="chart-box">
+      <h4>Statistiques de position</h4>
+      <p class="cd">Moyenne, médiane et quartiles. L'écart entre moyenne et médiane mesure à lui seul le déséquilibre de la distribution.</p>
+      <dl class="kv" id="statKv"></dl>
+      <svg class="chart" id="box" viewBox="0 0 420 150" style="margin-top:14px"></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= JEUX ================= -->
+<section class="blk" id="jeux">
+  <div class="blk-head">
+    <div>
+      <h2 class="h2">Jeux diffusés</h2>
+      <p class="sub">Le champ « game » renvoyé par l'API pour chaque chaîne en live. Pendant le marathon, la majorité des chaînes affichent la catégorie ZEVENT.</p>
+    </div>
+    <span class="cnt" id="gameCount"></span>
+  </div>
+  <div id="gameList"></div>
+</section>
+
+<!-- ================= DIRECT ================= -->
+<section class="blk" id="direct">
+  <div class="blk-head">
+    <div>
+      <h2 class="h2">Journal du direct</h2>
+      <p class="sub">Chaque changement détecté entre deux actualisations : passages en live, arrêts, changements de jeu et sauts de collecte. Le journal démarre à l'ouverture de la page.</p>
+    </div>
+    <div class="chips">
+      <button class="btn sm" id="logClear">Vider le journal</button>
+    </div>
+  </div>
+  <div class="two" style="margin-bottom:4px">
+    <div class="chart-box">
+      <h4>Cagnotte pendant la session</h4>
+      <p class="cd">Un point par actualisation réussie depuis l'ouverture de la page.</p>
+      <svg class="chart" id="histChart" viewBox="0 0 640 220"></svg>
+    </div>
+    <div class="chart-box">
+      <h4>Viewers pendant la session</h4>
+      <p class="cd">Audience cumulée déclarée par l'API sur la même période.</p>
+      <svg class="chart" id="viewChart" viewBox="0 0 640 220"></svg>
+    </div>
+  </div>
+  <div class="log hide-sb" id="log"><div class="empty">Le journal se remplit dès la deuxième actualisation.</div></div>
+</section>
+
+<!-- ================= DONNÉES ================= -->
+<section class="blk" id="donnees">
+  <div class="blk-head">
+    <div>
+      <h2 class="h2">Source des données</h2>
+      <p class="sub">Cette page interroge <code style="font-size:12px">https://zevent.fr/api/</code>, l'API publique utilisée par le site officiel. Aucune donnée n'est inventée ni complétée : tout ce qui est affiché est soit un champ brut de l'API, soit un calcul effectué sur ces champs.</p>
+    </div>
+  </div>
+
+  <div class="warn" style="margin-bottom:4px">
+    <b>Pourquoi l'appel direct échoue.</b> L'API ZEVENT ne renvoie pas d'en-tête <code>Access-Control-Allow-Origin</code>. Le navigateur bloque donc tout appel venant d'un fichier local ou d'un autre domaine. Huit sources sont lancées <b>en parallèle</b> à chaque actualisation et la première réponse exploitable est retenue : une source lente ou bloquée ne pénalise pas les autres. Si toutes échouent, un encadré apparaît en haut de page pour charger le JSON à la main en deux clics. La pastille en haut à droite indique la source réellement utilisée.
+  </div>
+
+  <div class="two">
+    <div class="chart-box">
+      <h4>État de la connexion</h4>
+      <p class="cd">Détail de la dernière tentative de récupération.</p>
+      <dl class="kv" id="netKv"></dl>
+      <div class="tools" style="margin-top:16px;margin-bottom:0">
+        <select class="sel" id="pollSel" aria-label="Fréquence d'actualisation">
+          <option value="10000">Toutes les 10 s</option>
+          <option value="20000" selected>Toutes les 20 s</option>
+          <option value="30000">Toutes les 30 s</option>
+          <option value="60000">Toutes les 60 s</option>
+          <option value="0">Actualisation manuelle</option>
+        </select>
+        <select class="sel" id="srcSel" aria-label="Source des données">
+          <option value="auto">Toutes les sources en parallèle</option>
+          <option value="jina">Relais r.jina.ai</option>
+          <option value="corssh">Relais cors.sh</option>
+          <option value="corsfix">Relais corsfix (site hébergé)</option>
+          <option value="jinamd">Relais r.jina.ai (texte)</option>
+          <option value="direct">Appel direct uniquement</option>
+          <option value="allorigins">Relais allorigins</option>
+          <option value="alljson">Relais allorigins (JSON)</option>
+          <option value="codetabs">Relais codetabs</option>
+          <option value="custom">Relais personnalisé</option>
+          <option value="manual">JSON collé à la main</option>
+        </select>
+        <button class="btn sm p" id="btnRefresh2">Actualiser</button>
+      </div>
+      <h4 style="margin-top:20px">Relais personnalisé</h4>
+      <p class="cd">Si les relais publics sont bloqués chez vous, indiquez le vôtre. Utilisez <code style="font-size:11.5px">{url}</code> pour l'adresse encodée, ou <code style="font-size:11.5px">{raw}</code> pour l'adresse telle quelle. Exemple : <code style="font-size:11.5px">https://mon-relais.exemple/?target={url}</code></p>
+      <div class="tools" style="margin-bottom:0">
+        <label class="search"><input type="text" id="customIn" placeholder="https://…/?url={url}" autocomplete="off" aria-label="Adresse du relais personnalisé"></label>
+        <button class="btn sm" id="customSave">Enregistrer et tester</button>
+      </div>
+    </div>
+    <div class="chart-box">
+      <h4>Exporter l'instantané</h4>
+      <p class="cd">Les données affichées à cet instant, avec les colonnes calculées par la page.</p>
+      <div class="tools" style="margin-bottom:0">
+        <button class="btn sm" id="expCsv">Télécharger le CSV</button>
+        <button class="btn sm" id="expJson">Télécharger le JSON</button>
+        <button class="btn sm" id="expHist">Historique de session (CSV)</button>
+        <button class="btn sm" id="copyStats">Copier le résumé</button>
+      </div>
+      <h4 style="margin-top:20px">Charger un JSON manuellement</h4>
+      <p class="cd">Ouvrez <code style="font-size:11.5px">https://zevent.fr/api/</code> dans un onglet, copiez tout, collez ici. Utile si les relais sont indisponibles.</p>
+      <textarea id="manualIn" placeholder='{"live":[…],"donationAmount":{…},"viewersCount":{…}}' spellcheck="false"></textarea>
+      <div class="tools" style="margin-top:8px;margin-bottom:0">
+        <button class="btn sm p" id="manualLoad">Charger ce JSON</button>
+        <button class="btn sm" id="clipPaste">Coller depuis le presse-papier</button>
+        <a class="btn sm g" href="https://zevent.fr/api/" target="_blank" rel="noopener">Ouvrir l'API</a>
+        <input type="file" id="fileIn" accept=".json,application/json" style="display:none">
+        <button class="btn sm" id="filePick">Choisir un fichier</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-box" style="margin-top:4px">
+    <h4>Champs fournis par l'API</h4>
+    <p class="cd">Structure réelle de la réponse, telle qu'observée. Tout ce que cette page affiche en dérive.</p>
+    <dl class="kv" id="schemaKv"></dl>
+  </div>
+
+  <p class="note">
+    Page non officielle, sans affiliation avec le ZEVENT, ses organisateurs ou les associations soutenues.
+    Les avatars sont servis par le CDN de Twitch, la police Switzer par Fontshare.
+    Les indicateurs de vitesse de collecte et les projections sont des extrapolations linéaires calculées sur la seule durée d'ouverture de cette page : ce ne sont pas des prévisions, et l'API ne publie aucun historique permettant de les valider.
+    Pour donner, passez par <a href="https://zevent.fr/don" target="_blank" rel="noopener" style="color:var(--p500)">zevent.fr/don</a>.
+  </p>
+</section>
+
+<footer class="credit">
+  Page de stats conçue et développée par <a href="https://github.com/Mifu999" target="_blank" rel="noopener">Mifu</a>.
+  <span class="sep">·</span>
+  Données de l'<a href="https://zevent.fr/api/" target="_blank" rel="noopener">API publique du ZEVENT</a>.
+  <span class="fine">Projet non officiel, sans affiliation avec le ZEVENT, ses organisateurs ou les associations soutenues.</span>
+</footer>
+
+</div><!-- /#app -->
+
+<div class="bottom" id="bottomBar">
+  <span class="bstat">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="7" r="3" stroke="#9C9C9C" stroke-width="1.5"/><path d="M4 17c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="#9C9C9C" stroke-width="1.5"/></svg>
+    <span class="tnum" id="bViewers">—</span>
+  </span>
+  <span class="bsep"></span>
+  <span class="bstat" style="color:var(--p500)">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.2" stroke="currentColor" stroke-width="1.5"/><path d="M12.4 7.6H8.8a1.6 1.6 0 000 3.2h2.4a1.6 1.6 0 010 3.2H7.6M10 6v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span class="tnum" id="bPot">—</span>
+  </span>
+  <span class="bsep"></span>
+  <span class="bstat"><span class="livedot" id="bDot"></span><span class="tnum" id="bLive">—</span></span>
+  <span class="bsep"></span>
+  <span class="bstat" title="Prochaine actualisation">
+    <svg class="ring" width="20" height="20" viewBox="0 0 20 20"><circle class="bg" cx="10" cy="10" r="8"/><circle class="fg" id="ring" cx="10" cy="10" r="8" stroke-dasharray="50.3" stroke-dashoffset="0"/></svg>
+    <span class="tnum" id="bCd" style="color:var(--l500);font-size:12px">—</span>
+  </span>
+  <button class="btn sm" id="bRefresh" style="flex:none">Actualiser</button>
+  <a class="btn sm g" href="https://zevent.fr/don" target="_blank" rel="noopener" style="flex:none">Faire un don</a>
+</div>
+
+<div class="ovl" id="ovl" role="dialog" aria-modal="true" aria-labelledby="mName">
+  <div class="modal" id="modal"></div>
+</div>
+<div class="tipbox" id="tip" role="status"></div>
+<script>
+"use strict";
+/* ============================================================
+   ZEVENT 2026 — Tableau de bord (non officiel)
+   Source unique : https://zevent.fr/api/
+   Aucune valeur n'est simulée. Tout ce qui n'est pas un champ
+   brut de l'API est un calcul explicite sur ces champs.
+   ============================================================ */
+
+/* ---------- Raccourcis ---------- */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Formats FR ---------- */
+const nfInt  = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
+const nf1    = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const nf2    = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const nfEur  = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+const nfEur2 = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const num   = v => nfInt.format(Math.round(v || 0));
+const eur   = v => nfEur.format(v || 0);
+const eur2  = v => nfEur2.format(v || 0);
+const pct   = (v, d = 1) => (v * 100).toFixed(d).replace('.', ',') + ' %';
+const hhmmss = ts => new Date(ts).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+const compact = v => {
+  const a = Math.abs(v);
+  if (a >= 1e6) return nf1.format(v / 1e6) + ' M';
+  if (a >= 1e3) return nf1.format(v / 1e3) + ' k';
+  return num(v);
+};
+const dur = ms => {
+  const s = Math.max(0, Math.round(ms / 1000));
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
+  return h ? `${h} h ${String(m).padStart(2,'0')} min` : m ? `${m} min ${String(r).padStart(2,'0')} s` : `${r} s`;
+};
+
+/* ---------- Stockage tolérant (peut être bloqué selon le contexte) ---------- */
+const store = {
+  get(k)   { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k,v) { try { localStorage.setItem(k, v); } catch {} },
+};
+
+/* ---------- État global ---------- */
+const S = {
+  raw: null,              // dernière réponse API brute
+  prev: null,             // réponse précédente (pour les deltas)
+  streamers: [],          // liste enrichie
+  byId: new Map(),        // twitch_id -> streamer enrichi
+  firstSeen: new Map(),   // twitch_id -> { don, viewers } à la première observation
+  hist: [],               // [{t, pot, viewers, live}] historique de session
+  events: [],             // journal
+  openedAt: Date.now(),
+  lastOk: 0,
+  lastTry: 0,
+  lastErr: null,
+  lastMs: 0,
+  source: null,           // clé de la source utilisée
+  attempts: [],           // journal de la dernière cascade
+  poll: 20000,
+  forcedSource: 'auto',
+  timer: null, cdTimer: null, nextAt: 0, inFlight: false, fails: 0,
+  rankMode: 'don',
+  filters: { q: '', loc: 'all', st: 'all', game: '' },
+  sort: 'don',
+  view: 'grid',
+  potAnim: { from: 0, to: 0, start: 0, dur: 900, raf: 0, cur: 0 },
+};
+
+/* ============================================================
+   RÉCUPÉRATION — cascade de sources
+   L'API zevent.fr ne renvoie pas d'en-tête CORS : l'appel direct
+   ne fonctionne que depuis une page servie par zevent.fr ou avec
+   une extension qui relâche la règle. On retombe donc sur des
+   relais publics, puis sur la saisie manuelle.
+   ============================================================ */
+const API = 'https://zevent.fr/api/';
+const bust = () => API + '?_=' + Date.now();
+
+/* Extrait un objet JSON d'un texte qui peut contenir autre chose autour. */
+function extractJson(text) {
+  const t = String(text).trim();
+  if (t.startsWith('{')) { try { return JSON.parse(t); } catch {} }
+  let i = t.indexOf('{"live"');
+  if (i < 0) i = t.indexOf('{');
+  const j = t.lastIndexOf('}');
+  if (i >= 0 && j > i) return JSON.parse(t.slice(i, j + 1));
+  throw new Error('aucun JSON trouvé dans la réponse');
+}
+
+/* Relais testés depuis un navigateur, en partant d'un fichier local.
+   Ordre indicatif : la récupération lance tout en parallèle et garde
+   la première réponse exploitable. */
+const SOURCES = [
+  { key: 'jina', label: 'Relais r.jina.ai', build: () => [ 'https://r.jina.ai/' + bust(), { headers: { 'x-respond-with': 'text' } } ] },
+  { key: 'corssh', label: 'Relais cors.sh', build: () => [ 'https://proxy.cors.sh/' + bust(), {} ] },
+  { key: 'corsfix', label: 'Relais corsfix', build: () => [ 'https://proxy.corsfix.com/?' + bust(), {} ] },
+  { key: 'jinamd', label: 'Relais r.jina.ai (texte)', build: () => [ 'https://r.jina.ai/' + bust(), {} ] },
+  { key: 'direct', label: 'Appel direct', build: () => [ bust(), {} ] },
+  { key: 'allorigins', label: 'Relais allorigins', build: () => [ 'https://api.allorigins.win/raw?url=' + encodeURIComponent(bust()), {} ] },
+  { key: 'alljson', label: 'Relais allorigins (JSON)', build: () => [ 'https://api.allorigins.win/get?url=' + encodeURIComponent(bust()), {} ] },
+  { key: 'codetabs', label: 'Relais codetabs', build: () => [ 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(bust()), {} ] },
+  { key: 'custom', label: 'Relais personnalisé', custom: true, build: () => {
+      const tpl = (store.get('ze.custom') || '').trim();
+      if (!tpl) throw new Error('aucun relais personnalisé enregistré');
+      const u = tpl.includes('{url}')
+        ? tpl.replace('{url}', encodeURIComponent(bust()))
+        : tpl.includes('{raw}') ? tpl.replace('{raw}', bust()) : tpl + bust();
+      return [u, {}];
+  } },
+];
+
+function validPayload(d) {
+  return d && Array.isArray(d.live) && d.donationAmount && typeof d.donationAmount.number === 'number';
+}
+
+async function tryOne(src, signal) {
+  const t0 = performance.now();
+  const [url, opts] = src.build();
+  const res = await fetch(url, { ...opts, signal, cache: 'no-store', mode: 'cors', redirect: 'follow' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const txt = await res.text();
+  let data = extractJson(txt);
+  if (data && typeof data.contents === 'string') data = extractJson(data.contents); // enveloppe allorigins
+  if (!validPayload(data)) throw new Error('réponse inexploitable');
+  return { data, ms: Math.round(performance.now() - t0), bytes: txt.length };
+}
+
+/* Lance toutes les sources en même temps et garde la première qui répond.
+   Une source lente ou bloquée ne pénalise plus les autres. */
+async function fetchData(manualTrigger) {
+  if (S.forcedSource === 'manual') { setStatus('warn', 'JSON manuel'); renderNet(); return; }
+  if (S.inFlight) return;
+  S.inFlight = true;
+  S.lastTry = Date.now();
+  S.attempts = SOURCES
+    .filter(s => (S.forcedSource === 'auto' || s.key === S.forcedSource) && (!s.custom || (store.get('ze.custom') || '').trim()))
+    .map(s => ({ key: s.key, label: s.label, state: 'en cours' }));
+
+  setStatus('warn', manualTrigger ? 'Actualisation…' : 'Mise à jour…');
+  renderNet();
+
+  const list = SOURCES.filter(s => (S.forcedSource === 'auto' || s.key === S.forcedSource) && (!s.custom || (store.get('ze.custom') || '').trim()));
+  if (!list.length) { S.inFlight = false; renderNet(); return; }
+
+  const ctl = new AbortController();
+  const budget = setTimeout(() => ctl.abort(), 14000);
+  let done = false;
+
+  const runs = list.map(src => tryOne(src, ctl.signal).then(
+    r => {
+      const a = S.attempts.find(x => x.key === src.key);
+      if (a) { a.state = 'réussi'; a.ms = r.ms; a.bytes = r.bytes; }
+      if (done) return r;
+      done = true;
+      S.source = src.key; S.lastOk = Date.now(); S.lastMs = r.ms; S.lastErr = null; S.fails = 0;
+      clearTimeout(budget);
+      applyData(r.data, src.label);
+      saveSnapshot(r.data);
+      hideFallback();
+      setTimeout(() => ctl.abort(), 50); // coupe les requêtes encore en vol
+      return r;
+    },
+    e => {
+      const a = S.attempts.find(x => x.key === src.key);
+      const msg = e.name === 'AbortError' ? (done ? 'annulé' : 'délai dépassé') : (e.message || 'échec');
+      if (a) { a.state = 'échec'; a.err = msg; }
+      throw e;
+    }
+  ));
+
+  try { await Promise.any(runs); }
+  catch {
+    clearTimeout(budget);
+    S.fails = (S.fails || 0) + 1;
+    S.lastErr = 'Aucun relais n\'a répondu (tentative ' + S.fails + ')';
+    setStatus('err', S.raw ? 'Données figées' : 'Indisponible');
+    if (!S.raw) showFallback();
+    renderNet();
+    scheduleNext();
+  }
+  finally { S.inFlight = false; }
+}
+
+/* Dernier instantané valide, pour ne jamais afficher une page vide */
+function saveSnapshot(d) {
+  try { store.set('ze.snap', JSON.stringify({ t: Date.now(), d })); } catch {}
+}
+function loadSnapshot() {
+  try {
+    const r = store.get('ze.snap'); if (!r) return null;
+    const o = JSON.parse(r);
+    return validPayload(o.d) ? o : null;
+  } catch { return null; }
+}
+
+function setStatus(kind, txt) {
+  const d = $('#srcDot'), t = $('#srcTxt');
+  d.className = 'dot ' + kind + (kind === 'ok' ? '' : ' pulse');
+  t.textContent = txt;
+}
+
+function showFallback() {
+  let box = $('#fallback');
+  if (!box) {
+    box = el('div', 'warn');
+    box.id = 'fallback';
+    box.style.margin = '4px 0';
+    box.innerHTML = `
+      <b>Le navigateur n'a pas pu joindre l'API.</b>
+      L'API du ZEVENT n'autorise pas les appels venant d'une autre page, et aucun des relais publics n'a répondu — un bloqueur de contenu, un VPN ou un pare-feu peut aussi être en cause.
+      Récupérez les données à la main, c'est immédiat :
+      <div class="tools" style="margin:12px 0 0">
+        <a class="btn sm g" href="${API}" target="_blank" rel="noopener">1. Ouvrir l'API dans un onglet</a>
+        <button class="btn sm" id="fbPaste">2. Coller depuis le presse-papier</button>
+        <button class="btn sm" id="fbGo">3. Aller à la zone de collage</button>
+        <button class="btn sm" id="fbRetry">Réessayer les relais</button>
+      </div>
+      <p style="margin:10px 0 0;font-size:12px;color:var(--l600)">Dans l'onglet ouvert, faites Ctrl+A puis Ctrl+C, revenez ici et cliquez sur « Coller depuis le presse-papier ».</p>`;
+    $('.hero').after(box);
+    $('#fbRetry').onclick = () => fetchData(true);
+    $('#fbGo').onclick = () => { document.getElementById('donnees').scrollIntoView(); setTimeout(() => $('#manualIn').focus(), 400); };
+    $('#fbPaste').onclick = pasteFromClipboard;
+  }
+}
+function hideFallback() { const b = $('#fallback'); if (b) b.remove(); }
+
+async function pasteFromClipboard() {
+  try {
+    const txt = await navigator.clipboard.readText();
+    if (!txt || txt.length < 100) throw new Error('le presse-papier est vide ou trop court');
+    loadManual(txt);
+  } catch (e) {
+    alert("Le presse-papier n'a pas pu être lu (" + (e.message || e.name) + ").\n\nCollez le contenu directement dans la zone de texte de la section « Données », en bas de page.");
+    document.getElementById('donnees').scrollIntoView();
+    setTimeout(() => $('#manualIn').focus(), 400);
+  }
+}
+
+/* ============================================================
+   ENRICHISSEMENT + STATISTIQUES
+   ============================================================ */
+function applyData(d, srcLabel) {
+  S.prev = S.raw;
+  S.raw = d;
+
+  const live = d.live || [];
+  const totalPot = d.donationAmount.number;
+
+  // enrichissement
+  const list = live.map(s => {
+    const don = s.donationAmount?.number || 0;
+    const vw  = s.viewersAmount?.number || 0;
+    return {
+      id: s.twitch_id, name: s.display, login: s.twitch,
+      avatar: s.profileUrl, online: !!s.online, game: s.game || '—',
+      viewers: vw, don, lan: s.location === 'LAN', location: s.location,
+      donUrl: s.donationUrl, ref: s.ref, streamlabsId: s.streamlabsId,
+      ratio: vw > 0 ? don / vw : null,
+      share: totalPot > 0 ? don / totalPot : 0,
+      raw: s,
+    };
+  });
+
+  // rangs
+  const byDon = [...list].sort((a, b) => b.don - a.don);
+  byDon.forEach((s, i) => s.rankDon = i + 1);
+  const byVw = [...list].sort((a, b) => b.viewers - a.viewers);
+  byVw.forEach((s, i) => s.rankViewers = i + 1);
+
+  // deltas depuis l'actualisation précédente et depuis l'ouverture
+  const prevMap = new Map(S.streamers.map(s => [s.id, s]));
+  for (const s of list) {
+    const p = prevMap.get(s.id);
+    s.dDon = p ? s.don - p.don : 0;
+    s.dViewers = p ? s.viewers - p.viewers : 0;
+    s.prevRankDon = p ? p.rankDon : s.rankDon;
+    if (!S.firstSeen.has(s.id)) S.firstSeen.set(s.id, { don: s.don, viewers: s.viewers, rank: s.rankDon });
+    const f = S.firstSeen.get(s.id);
+    s.sessDon = s.don - f.don;
+    s.sessViewers = s.viewers - f.viewers;
+    s.sessRank = f.rank - s.rankDon;
+  }
+
+  detectEvents(prevMap, list, d);
+
+  S.streamers = list;
+  S.byId = new Map(list.map(s => [s.id, s]));
+  S.stats = computeStats(list, d);
+
+  // historique de session
+  const now = Date.now();
+  const lastH = S.hist[S.hist.length - 1];
+  if (!lastH || lastH.pot !== S.stats.pot || lastH.viewers !== S.stats.viewers || now - lastH.t > 55000) {
+    S.hist.push({ t: now, pot: S.stats.pot, viewers: S.stats.viewers, live: S.stats.liveCount });
+    if (S.hist.length > 3000) S.hist.splice(0, S.hist.length - 3000);
+  }
+
+  setStatus('ok', srcLabel + ' · ' + hhmmss(S.lastOk));
+  const f = $('#fatal'); if (f) f.remove();
+  renderAll();
+  scheduleNext();
+}
+
+function quantile(sortedAsc, p) {
+  if (!sortedAsc.length) return 0;
+  const idx = (sortedAsc.length - 1) * p;
+  const lo = Math.floor(idx), hi = Math.ceil(idx);
+  return lo === hi ? sortedAsc[lo] : sortedAsc[lo] + (sortedAsc[hi] - sortedAsc[lo]) * (idx - lo);
+}
+
+/** Indice de Gini par la formule des rangs sur une série triée croissante. */
+function gini(sortedAsc) {
+  const n = sortedAsc.length;
+  if (n < 2) return 0;
+  let sum = 0, tot = 0;
+  for (let i = 0; i < n; i++) { sum += (2 * (i + 1) - n - 1) * sortedAsc[i]; tot += sortedAsc[i]; }
+  return tot > 0 ? sum / (n * tot) : 0;
+}
+
+/** Corrélation de Pearson. */
+function pearson(xs, ys) {
+  const n = xs.length; if (n < 3) return null;
+  const mx = xs.reduce((a, b) => a + b, 0) / n, my = ys.reduce((a, b) => a + b, 0) / n;
+  let sxy = 0, sxx = 0, syy = 0;
+  for (let i = 0; i < n; i++) { const a = xs[i] - mx, b = ys[i] - my; sxy += a * b; sxx += a * a; syy += b * b; }
+  return (sxx && syy) ? sxy / Math.sqrt(sxx * syy) : null;
+}
+
+/** Corrélation de rang de Spearman (rangs moyens sur ex aequo). */
+function spearman(xs, ys) {
+  const rank = arr => {
+    const idx = arr.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]);
+    const r = new Array(arr.length);
+    let i = 0;
+    while (i < idx.length) {
+      let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
+      const avg = (i + j) / 2 + 1;
+      for (let k = i; k <= j; k++) r[idx[k][1]] = avg;
+      i = j + 1;
+    }
+    return r;
+  };
+  return pearson(rank(xs), rank(ys));
+}
+
+function computeStats(list, d) {
+  const pot = d.donationAmount.number;
+  const viewers = d.viewersCount?.number || 0;
+  const liveArr = list.filter(s => s.online);
+  const lanArr = list.filter(s => s.lan);
+  const onlArr = list.filter(s => !s.lan);
+
+  const dons = list.map(s => s.don);
+  const donsAsc = [...dons].sort((a, b) => a - b);
+  const sumDon = dons.reduce((a, b) => a + b, 0);
+  const vwsLive = liveArr.map(s => s.viewers);
+  const vwsAsc = [...vwsLive].sort((a, b) => a - b);
+  const sumVw = vwsLive.reduce((a, b) => a + b, 0);
+
+  const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+  const sd = a => { if (a.length < 2) return 0; const m = mean(a); return Math.sqrt(a.reduce((s, v) => s + (v - m) ** 2, 0) / (a.length - 1)); };
+
+  const byDon = [...list].sort((a, b) => b.don - a.don);
+  const topShare = n => sumDon > 0 ? byDon.slice(0, n).reduce((s, x) => s + x.don, 0) / sumDon : 0;
+  const countFor = target => { let acc = 0, i = 0; while (i < byDon.length && acc < target * sumDon) { acc += byDon[i].don; i++; } return i; };
+
+  const byVw = [...liveArr].sort((a, b) => b.viewers - a.viewers);
+  const topShareVw = n => sumVw > 0 ? byVw.slice(0, n).reduce((s, x) => s + x.viewers, 0) / sumVw : 0;
+
+  // corrélation sur les chaînes en live avec au moins un viewer et un don
+  const pairs = liveArr.filter(s => s.viewers > 0 && s.don > 0);
+  const px = pairs.map(s => s.viewers), py = pairs.map(s => s.don);
+
+  // vitesse de collecte mesurée sur la session
+  let rate = null, rateWin = null, projEnd = null;
+  if (S.hist.length >= 2) {
+    const a = S.hist[0], b = S.hist[S.hist.length - 1];
+    const dt = (Date.now() - a.t) / 1000;
+    if (dt > 45 && pot > a.pot) rate = (pot - a.pot) / dt; // €/s sur toute la session
+    const cut = Date.now() - 10 * 60 * 1000;
+    const w = S.hist.filter(h => h.t >= cut);
+    if (w.length >= 2) {
+      const dt2 = (Date.now() - w[0].t) / 1000;
+      if (dt2 > 45 && pot > w[0].pot) rateWin = (pot - w[0].pot) / dt2; // €/s sur 10 min
+    }
+  }
+
+  const games = new Map();
+  for (const s of liveArr) {
+    const g = s.game || '—';
+    if (!games.has(g)) games.set(g, { name: g, n: 0, viewers: 0, don: 0, list: [] });
+    const o = games.get(g); o.n++; o.viewers += s.viewers; o.don += s.don; o.list.push(s);
+  }
+  const gameList = [...games.values()].sort((a, b) => b.viewers - a.viewers || b.n - a.n);
+
+  const hist = (arr, bins, val) => bins.map((b, i) => {
+    const next = bins[i + 1] ? bins[i + 1].min : Infinity;
+    const sel = arr.filter(s => val(s) >= b.min && val(s) < next);
+    return { ...b, max: next, n: sel.length, sum: sel.reduce((a, s) => a + val(s), 0) };
+  });
+
+  const donBins = hist(list, [
+    { min: 0, label: 'Moins de 500 €' }, { min: 500, label: '500 – 1 000 €' },
+    { min: 1000, label: '1 000 – 5 000 €' }, { min: 5000, label: '5 000 – 10 000 €' },
+    { min: 10000, label: '10 000 – 25 000 €' }, { min: 25000, label: '25 000 – 50 000 €' },
+    { min: 50000, label: '50 000 – 100 000 €' }, { min: 100000, label: '100 000 € et plus' },
+  ], s => s.don);
+
+  const vwBins = hist(liveArr, [
+    { min: 0, label: 'Moins de 100' }, { min: 100, label: '100 – 500' },
+    { min: 500, label: '500 – 1 000' }, { min: 1000, label: '1 000 – 5 000' },
+    { min: 5000, label: '5 000 – 20 000' }, { min: 20000, label: '20 000 et plus' },
+  ], s => s.viewers);
+
+  const withRatio = liveArr.filter(s => s.viewers >= 50 && s.don > 0);
+
+  return {
+    pot, viewers, potFmt: d.donationAmount.formatted, viewersFmt: d.viewersCount?.formatted,
+    total: list.length, liveCount: liveArr.length, offCount: list.length - liveArr.length,
+    liveRate: list.length ? liveArr.length / list.length : 0,
+    lanCount: lanArr.length, onlCount: onlArr.length,
+    lanDon: lanArr.reduce((a, s) => a + s.don, 0), onlDon: onlArr.reduce((a, s) => a + s.don, 0),
+    lanViewers: lanArr.filter(s => s.online).reduce((a, s) => a + s.viewers, 0),
+    onlViewers: onlArr.filter(s => s.online).reduce((a, s) => a + s.viewers, 0),
+    lanLive: lanArr.filter(s => s.online).length, onlLive: onlArr.filter(s => s.online).length,
+    sumDon, unattributed: pot - sumDon, attrShare: pot > 0 ? sumDon / pot : 0,
+    sumViewersLive: sumVw,
+    meanDon: mean(dons), medDon: quantile(donsAsc, .5), sdDon: sd(dons),
+    q1Don: quantile(donsAsc, .25), q3Don: quantile(donsAsc, .75),
+    p90Don: quantile(donsAsc, .9), maxDon: donsAsc[donsAsc.length - 1] || 0, minDon: donsAsc[0] || 0,
+    meanVw: mean(vwsLive), medVw: quantile(vwsAsc, .5), maxVw: vwsAsc[vwsAsc.length - 1] || 0,
+    q1Vw: quantile(vwsAsc, .25), q3Vw: quantile(vwsAsc, .75),
+    giniDon: gini(donsAsc), giniVw: gini(vwsAsc),
+    donsAsc, vwsAsc,
+    top1: topShare(1), top3: topShare(3), top5: topShare(5), top10: topShare(10),
+    top20: topShare(20), top50: topShare(50), top100: topShare(100),
+    top10Vw: topShareVw(10), top1Vw: topShareVw(1),
+    n50: countFor(.5), n80: countFor(.8), n90: countFor(.9),
+    perViewer: viewers > 0 ? pot / viewers : 0,
+    perStreamer: list.length ? pot / list.length : 0,
+    pearson: pearson(px, py), spearman: spearman(px, py),
+    pearsonLog: pearson(px.map(Math.log), py.map(Math.log)),
+    pairsN: pairs.length,
+    rate, rateWin,
+    games: gameList, gamesN: gameList.length,
+    donBins, vwBins,
+    bestRatio: withRatio.sort((a, b) => b.ratio - a.ratio),
+    zeroDon: list.filter(s => s.don === 0).length,
+    liveNoViewer: liveArr.filter(s => s.viewers === 0).length,
+    websiteMode: d.websiteMode, campaign: d.streamlabsCampaignId,
+    marquee: d.marquee, calendarN: (d.calendar || []).length,
+  };
+}
+
+/* ---------- Détection d'événements entre deux actualisations ---------- */
+function detectEvents(prevMap, list, d) {
+  if (!prevMap.size) { pushEvent('sys', '◆', 'Première lecture de l\'API : ' + list.length + ' chaînes chargées.'); return; }
+  const prevPot = S.prev?.donationAmount?.number;
+  if (typeof prevPot === 'number' && d.donationAmount.number > prevPot) {
+    const diff = d.donationAmount.number - prevPot;
+    if (diff >= 1) pushEvent('don', '€', `Cagnotte <b>+${eur(diff)}</b> — total ${eur(d.donationAmount.number)}`);
+  }
+  let onCount = 0, offCount = 0;
+  for (const s of list) {
+    const p = prevMap.get(s.id);
+    if (!p) { pushEvent('sys', '+', `<b>${esc(s.name)}</b> apparaît dans la liste`); continue; }
+    if (s.online && !p.online) { pushEvent('on', '▶', `<b>${esc(s.name)}</b> passe en live${s.game && s.game !== 'ZEVENT' ? ' sur ' + esc(s.game) : ''}`); onCount++; }
+    else if (!s.online && p.online) { pushEvent('off', '■', `<b>${esc(s.name)}</b> a coupé son stream`); offCount++; }
+    else if (s.online && p.online && s.game !== p.game) { pushEvent('game', '↻', `<b>${esc(s.name)}</b> : ${esc(p.game)} → ${esc(s.game)}`); }
+    const dd = s.don - p.don;
+    if (dd >= 500) pushEvent('don', '€', `<b>${esc(s.name)}</b> encaisse <b>+${eur(dd)}</b> (total ${eur(s.don)})`);
+  }
+  if (onCount + offCount === 0 && S.events.length && S.events[0].kind === 'sys') { /* rien à signaler */ }
+}
+
+function pushEvent(kind, ic, text) {
+  S.events.unshift({ kind, ic, text, t: Date.now() });
+  if (S.events.length > 400) S.events.length = 400;
+}
+</script>
+<script>
+"use strict";
+/* ============================================================
+   RENDU
+   ============================================================ */
+
+function renderAll() {
+  renderHero();
+  renderTiles();
+  renderSplit();
+  renderRankings();
+  renderGameFilter();
+  renderList();
+  renderAnalyses();
+  renderGames();
+  renderLog();
+  renderSessionCharts();
+  renderNet();
+  renderSchema();
+  renderBottom();
+}
+
+/* ---------- Compteur animé ---------- */
+function animatePot(to) {
+  const a = S.potAnim;
+  if (REDUCED || !a.cur) { a.cur = to; paintPot(to); return; }
+  cancelAnimationFrame(a.raf);
+  a.from = a.cur; a.to = to; a.start = performance.now();
+  const step = now => {
+    const p = clamp((now - a.start) / a.dur, 0, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    a.cur = a.from + (a.to - a.from) * e;
+    paintPot(a.cur);
+    if (p < 1) a.raf = requestAnimationFrame(step);
+  };
+  a.raf = requestAnimationFrame(step);
+}
+function paintPot(v) {
+  const int = Math.floor(v);
+  const cents = Math.round((v - int) * 100);
+  $('#pot').innerHTML = `${nfInt.format(int)}<span class="cents">,${String(cents).padStart(2,'0')}</span><span class="cur">€</span>`;
+}
+
+function renderHero() {
+  const st = S.stats;
+  animatePot(st.pot);
+
+  const parts = [];
+  parts.push(`<b>${num(st.total)}</b> chaînes inscrites`);
+  parts.push(`<b>${num(st.liveCount)}</b> en direct`);
+  if (st.rate) parts.push(`environ <b>${eur(st.rate * 3600)}</b> par heure sur la session`);
+  parts.push(`données de <b>${hhmmss(S.lastOk)}</b>`);
+  $('#potNote').innerHTML = parts.join(' · ');
+
+  $('#kViewers').textContent = num(st.viewers);
+  const dv = S.prev ? st.viewers - (S.prev.viewersCount?.number || 0) : 0;
+  $('#kViewersD').innerHTML = dv ? `<span class="${dv>0?'up':'down'}">${dv>0?'+':''}${num(dv)}</span> depuis la lecture précédente` : 'Somme déclarée par l\'API';
+
+  $('#kLive').innerHTML = `${num(st.liveCount)}<span style="font-size:.6em;color:var(--l600)"> / ${num(st.total)}</span>`;
+  $('#kLiveD').textContent = pct(st.liveRate, 0) + ' des chaînes inscrites';
+
+  if (st.rate) {
+    $('#kRate').textContent = eur(st.rate * 60) + ' / min';
+    const w = st.rateWin ? ` · ${eur(st.rateWin*60)}/min sur 10 min` : '';
+    $('#kRateD').innerHTML = `Session de ${dur(Date.now() - S.openedAt)}${w}`;
+  } else {
+    $('#kRate').textContent = '—';
+    $('#kRateD').textContent = 'Disponible après une minute d\'observation';
+  }
+
+  $('#kPerV').textContent = eur2(st.perViewer);
+  $('#kLan').innerHTML = `${num(st.lanCount)}<span style="font-size:.6em;color:var(--l600)"> / ${num(st.onlCount)}</span>`;
+  $('#kLanD').innerHTML = `${pct(st.lanDon/Math.max(st.sumDon,1),0)} des dons attribués viennent de la LAN`;
+
+  drawSpark();
+}
+
+function drawSpark() {
+  const svg = $('#spark'), h = S.hist;
+  if (h.length < 2) { svg.innerHTML = `<text x="500" y="44" fill="#515151" font-size="13" text-anchor="middle" font-family="var(--ff)">La courbe apparaît après quelques actualisations</text>`; return; }
+  const W = 1000, H = 76, pad = 4;
+  const min = Math.min(...h.map(x => x.pot)), max = Math.max(...h.map(x => x.pot));
+  const span = Math.max(max - min, 1);
+  const t0 = h[0].t, tSpan = Math.max(h[h.length-1].t - t0, 1);
+  const pts = h.map(x => [pad + (x.t - t0) / tSpan * (W - pad*2), H - pad - (x.pot - min) / span * (H - pad*2 - 8)]);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const area = d + ` L${pts[pts.length-1][0].toFixed(1)} ${H} L${pts[0][0].toFixed(1)} ${H} Z`;
+  svg.innerHTML = `
+    <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00BD00" stop-opacity=".34"/><stop offset="100%" stop-color="#00BD00" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${area}" fill="url(#sg)"/>
+    <path d="${d}" fill="none" stroke="#00BD00" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${pts[pts.length-1][0].toFixed(1)}" cy="${pts[pts.length-1][1].toFixed(1)}" r="3.5" fill="#00BD00"/>
+    <text x="6" y="13" fill="#515151" font-size="10">${eur(min)}</text>
+    <text x="${W-6}" y="13" fill="#515151" font-size="10" text-anchor="end">+${eur(max-min)} depuis l'ouverture</text>`;
+}
+
+/* ---------- Tuiles ---------- */
+function tile(t, n, h, cls) {
+  return `<div class="tile"><div class="t">${t}</div><div class="n ${cls||''}">${n}</div>${h ? `<div class="h">${h}</div>` : ''}</div>`;
+}
+function renderTiles() {
+  const st = S.stats, s = S.streamers;
+  const topDon = [...s].sort((a,b)=>b.don-a.don)[0];
+  const topVw = [...s].filter(x=>x.online).sort((a,b)=>b.viewers-a.viewers)[0];
+  const bestRatio = st.bestRatio[0];
+  const sess = S.hist.length > 1 ? st.pot - S.hist[0].pot : 0;
+
+  $('#tiles').innerHTML = [
+    tile('Cagnotte totale', eur(st.pot), 'Champ <code>donationAmount</code>', 'sm'),
+    tile('Dons attribués à une chaîne', eur(st.sumDon), `${pct(st.attrShare)} du total`, 'sm'),
+    tile('Dons sans chaîne associée', eur(Math.max(st.unattributed,0)), 'Cagnotte globale, sur la page de don générale', 'sm'),
+    tile('Viewers cumulés', num(st.viewers), `Somme des chaînes : ${num(st.sumViewersLive)}`),
+    tile('Chaînes inscrites', num(st.total), `${num(st.liveCount)} en live, ${num(st.offCount)} hors ligne`),
+    tile('Présents à la LAN', num(st.lanCount), `${num(st.lanLive)} en live à cet instant`),
+    tile('Depuis chez eux', num(st.onlCount), `${num(st.onlLive)} en live à cet instant`),
+    tile('Don moyen par chaîne', eur(st.meanDon), `Médiane : ${eur(st.medDon)}`, 'sm'),
+    tile('Viewers moyens par live', num(st.meanVw), `Médiane : ${num(st.medVw)}`),
+    tile('Meilleure collecte', eur(topDon?.don||0), esc(topDon?.name||'—'), 'sm'),
+    tile('Plus forte audience', num(topVw?.viewers||0), esc(topVw?.name||'—')),
+    tile('Meilleur € par viewer', bestRatio ? eur2(bestRatio.ratio) : '—', bestRatio ? esc(bestRatio.name) + ' · minimum 50 viewers' : 'Aucune chaîne éligible', 'sm'),
+    tile('Concentration (Gini)', nf2.format(st.giniDon), '0 = parfaitement égal, 1 = tout sur une chaîne'),
+    tile('Part du top 10', pct(st.top10), `Il faut ${num(st.n50)} chaînes pour atteindre la moitié`),
+    tile('Jeux différents en live', num(st.gamesN), st.games[0] ? `Le plus suivi : ${esc(st.games[0].name)}` : ''),
+    tile('Chaînes sans don enregistré', num(st.zeroDon), st.zeroDon ? `${pct(st.zeroDon/st.total,0)} de la liste` : 'Toutes ont collecté'),
+    tile('Collecté pendant la session', sess > 0 ? '+' + eur(sess) : '—', sess > 0 ? `En ${dur(Date.now()-S.openedAt)}` : 'En attente de variation', 'sm'),
+    tile('Actualisations réussies', num(S.hist.length), S.lastMs ? `Dernière en ${S.lastMs} ms` : ''),
+  ].join('');
+}
+
+/* ---------- Barres horizontales génériques ---------- */
+function barRows(rows, opts = {}) {
+  const max = opts.max || Math.max(...rows.map(r => r.value), 1);
+  return rows.map(r => `
+    <div style="margin-bottom:11px">
+      <div style="display:flex;justify-content:space-between;gap:12px;font-size:13px;margin-bottom:3px;align-items:baseline">
+        <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${r.label}</span>
+        <span class="tnum" style="color:${r.color || 'var(--l300)'};flex:none;font-weight:700">${r.text}</span>
+      </div>
+      <div class="bar ${r.cls||''}"><i style="width:${Math.max(r.value/max*100,.8).toFixed(2)}%${r.bg?';background:'+r.bg:''}"></i></div>
+      ${r.hint ? `<div style="font-size:11px;color:var(--l700);margin-top:3px">${r.hint}</div>` : ''}
+    </div>`).join('');
+}
+
+function renderSplit() {
+  const st = S.stats;
+  $('#splitBars').innerHTML = barRows([
+    { label: 'Dons attribués à une chaîne', value: st.sumDon, text: eur(st.sumDon), color: 'var(--p500)', hint: pct(st.attrShare) + ' de la cagnotte, répartis sur ' + num(st.total - st.zeroDon) + ' chaînes' },
+    { label: 'Dons sur la cagnotte globale', value: Math.max(st.unattributed, 0), text: eur(Math.max(st.unattributed, 0)), color: 'var(--gold)', cls: 'gold', hint: pct(Math.max(1 - st.attrShare, 0)) + ' de la cagnotte, sans streamer associé' },
+  ]) + `<p style="font-size:12px;color:var(--l700);margin:12px 0 0;line-height:1.5">La différence entre le total annoncé et la somme des compteurs individuels correspond aux dons effectués sur la page générale. Elle peut aussi refléter un léger décalage de synchronisation entre les deux compteurs.</p>`;
+
+  const rows = [
+    { label: 'Chaînes inscrites', lan: st.lanCount, onl: st.onlCount, fmt: num },
+    { label: 'Chaînes en live', lan: st.lanLive, onl: st.onlLive, fmt: num },
+    { label: 'Dons collectés', lan: st.lanDon, onl: st.onlDon, fmt: eur },
+    { label: 'Viewers en direct', lan: st.lanViewers, onl: st.onlViewers, fmt: num },
+  ];
+  $('#lanBars').innerHTML = rows.map(r => {
+    const tot = r.lan + r.onl || 1;
+    return `<div style="margin-bottom:13px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;font-weight:600"><span>${r.label}</span>
+      <span class="tnum" style="font-weight:400;color:var(--l600)">${r.fmt(r.lan)} · ${r.fmt(r.onl)}</span></div>
+      <div style="display:flex;height:7px;border-radius:99px;overflow:hidden;background:var(--d300)">
+        <i style="width:${(r.lan/tot*100).toFixed(2)}%;background:linear-gradient(90deg,var(--p700),var(--p500))"></i>
+        <i style="width:${(r.onl/tot*100).toFixed(2)}%;background:linear-gradient(90deg,#2E5FA8,var(--online))"></i>
+      </div>
+      <div style="font-size:11px;color:var(--l700);margin-top:3px">${pct(r.lan/tot,0)} sur place · ${pct(r.onl/tot,0)} à distance</div>
+    </div>`;
+  }).join('') + `<div class="legend"><span><i style="background:var(--p500)"></i>Sur place (LAN)</span><span><i style="background:var(--online)"></i>À distance</span></div>`;
+}
+
+/* ---------- Classements ---------- */
+const RANKS = {
+  don:     { title: 'Top 20 des collectes', desc: 'Montant total collecté par chaîne, champ <code>donationAmount</code> de chaque streamer.', pick: l => [...l].sort((a,b)=>b.don-a.don), val: s => s.don, fmt: eur, sub: vw },
+  viewers: { title: 'Top 20 des audiences', desc: 'Spectateurs simultanés au moment de la lecture, chaînes en live uniquement.', pick: l => l.filter(s=>s.online).sort((a,b)=>b.viewers-a.viewers), val: s => s.viewers, fmt: num, sub: s => eur(s.don) + ' collectés' },
+  ratio:   { title: 'Top 20 du don par viewer', desc: 'Montant collecté divisé par les spectateurs actuels. Limité aux chaînes en live d\'au moins 50 viewers, sinon le ratio explose sur les très petites audiences.', pick: l => l.filter(s=>s.online&&s.viewers>=50&&s.don>0).sort((a,b)=>b.ratio-a.ratio), val: s => s.ratio, fmt: eur2, sub: s => `${eur(s.don)} · ${num(s.viewers)} viewers` },
+  lan:     { title: 'Top 20 des collectes sur place', desc: 'Streamers présents physiquement à la LAN.', pick: l => l.filter(s=>s.lan).sort((a,b)=>b.don-a.don), val: s => s.don, fmt: eur, sub: vw },
+  online:  { title: 'Top 20 des collectes à distance', desc: 'Streamers participant depuis chez eux.', pick: l => l.filter(s=>!s.lan).sort((a,b)=>b.don-a.don), val: s => s.don, fmt: eur, sub: vw },
+};
+function vw(s) { return s.online ? num(s.viewers) + ' viewers' : 'hors ligne'; }
+
+function renderRankings() {
+  const cfg = RANKS[S.rankMode];
+  const arr = cfg.pick(S.streamers);
+  $('#topTitle').textContent = cfg.title;
+  $('#topDesc').innerHTML = cfg.desc;
+
+  $('#podium').innerHTML = [1, 0, 2].map(i => {
+    const s = arr[i]; if (!s) return '<div></div>';
+    const r = i + 1;
+    return `<button class="pod r${r}" data-id="${s.id}">
+      <div class="rk">${r === 1 ? '1re place' : r + 'e place'}</div>
+      <img src="${esc(s.avatar)}" alt="" loading="lazy">
+      <div class="nm">${esc(s.name)}</div>
+      <div class="am tnum">${cfg.fmt(cfg.val(s))}</div>
+      <div class="mt">${cfg.sub(s)}</div>
+    </button>`;
+  }).join('');
+
+  const scaleMax = Math.max(cfg.val(arr[0]) || 1, 1);
+  $('#topBars').innerHTML = barRows(arr.slice(0, 20).map((s, i) => ({
+    label: `<span style="color:var(--l700);font-weight:700">${i+1}.</span> ${esc(s.name)}`,
+    value: cfg.val(s), text: cfg.fmt(cfg.val(s)), color: 'var(--p500)',
+    hint: cfg.sub(s) + (s.lan ? ' · sur place' : ' · à distance'),
+  })), { max: scaleMax });
+
+  const next = arr.slice(20, 40);
+  $('#nextTitle').textContent = next.length ? `Places 21 à ${20 + next.length}` : 'Suite du classement';
+  $('#nextDesc').textContent = next.length
+    ? 'La suite immédiate du classement, sur le même critère.'
+    : 'Ce critère ne retient pas assez de chaînes pour dépasser la vingtième place.';
+  $('#nextBars').innerHTML = next.length
+    ? barRows(next.map((s, i) => ({
+        label: `<span style="color:var(--l700);font-weight:700">${i+21}.</span> ${esc(s.name)}`,
+        value: cfg.val(s), text: cfg.fmt(cfg.val(s)), color: 'var(--l300)',
+        bg: 'linear-gradient(90deg,var(--p800),var(--p600))',
+        hint: cfg.sub(s) + (s.lan ? ' · sur place' : ' · à distance'),
+      })), { max: scaleMax })
+    : `<div class="empty">Rien au delà de la vingtième place pour ce critère.</div>`;
+
+  const movers = S.streamers.filter(s => s.sessDon > 0).sort((a, b) => b.sessDon - a.sessDon).slice(0, 14);
+  $('#movers').innerHTML = movers.length
+    ? `<div class="two" style="gap:0 26px"><div>${barRows(movers.slice(0,7).map(moverRow))}</div><div>${barRows(movers.slice(7).map(moverRow))}</div></div>`
+    : `<div class="empty">Aucune variation observée pour l'instant. Cette liste se remplit dès qu'une chaîne encaisse un don pendant que la page est ouverte.</div>`;
+}
+function moverRow(s) {
+  return {
+    label: esc(s.name), value: s.sessDon, text: '+' + eur(s.sessDon), color: 'var(--gold)', cls: 'gold',
+    hint: `${eur(s.don)} au total · rang ${s.rankDon}${s.sessRank ? ` (${s.sessRank>0?'+':''}${s.sessRank} place${Math.abs(s.sessRank)>1?'s':''})` : ''}`,
+  };
+}
+
+/* ---------- Liste des streamers ---------- */
+function filtered() {
+  const f = S.filters, q = f.q.trim().toLowerCase();
+  let a = S.streamers.filter(s =>
+    (!q || s.name.toLowerCase().includes(q) || s.login.toLowerCase().includes(q) || (s.game||'').toLowerCase().includes(q)) &&
+    (f.loc === 'all' || (f.loc === 'LAN' ? s.lan : !s.lan)) &&
+    (f.st === 'all' || (f.st === 'live' ? s.online : !s.online)) &&
+    (!f.game || s.game === f.game)
+  );
+  const cmp = {
+    don: (x, y) => y.don - x.don, donAsc: (x, y) => x.don - y.don,
+    viewers: (x, y) => y.viewers - x.viewers, viewersAsc: (x, y) => x.viewers - y.viewers,
+    ratio: (x, y) => (y.ratio ?? -1) - (x.ratio ?? -1),
+    share: (x, y) => y.share - x.share,
+    name: (x, y) => x.name.localeCompare(y.name, 'fr'),
+    nameDesc: (x, y) => y.name.localeCompare(x.name, 'fr'),
+  }[S.sort] || ((x, y) => y.don - x.don);
+  return a.sort(cmp);
+}
+
+const PIN = `<span class="pin" title="Sur place"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 18s6-5.2 6-9.4A6 6 0 004 8.6C4 12.8 10 18 10 18z" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="8.5" r="2" stroke="currentColor" stroke-width="1.5"/></svg></span>`;
+const GLOBE = `<span class="pin" title="À distance"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M3 10h14M10 3c2 2.4 2 11.6 0 14M10 3C8 5.4 8 14.6 10 17" stroke="currentColor" stroke-width="1.3"/></svg></span>`;
+
+function rkClass(r) { return r === 1 ? 'top1' : r <= 3 ? 'top3' : r <= 10 ? 'top10' : ''; }
+
+function renderList() {
+  const arr = filtered(), st = S.stats;
+  $('#listCount').textContent = `${num(arr.length)} sur ${num(S.streamers.length)}`;
+
+  if (S.view === 'grid') {
+    const frag = document.createDocumentFragment();
+    for (const s of arr.slice(0, 400)) {
+      const b = el('button', 'srow');
+      b.dataset.id = s.id;
+      b.innerHTML = `
+        <span class="rkbadge ${rkClass(s.rankDon)}">${s.rankDon}</span>
+        <img src="${esc(s.avatar)}" alt="" loading="lazy" decoding="async">
+        <span class="mid">
+          <span class="nm"><span>${esc(s.name)}</span>${s.lan ? PIN : GLOBE}</span>
+          <span class="meta"><span class="game">${esc(s.game)}</span><span class="eur tnum">${eur(s.don)}</span></span>
+        </span>
+        <span class="right"><span class="livedot${s.online?'':' off'}"></span><span class="vw tnum">${s.online ? num(s.viewers) : 'hors ligne'}</span></span>`;
+      frag.appendChild(b);
+    }
+    const list = $('#slist');
+    list.innerHTML = '';
+    list.appendChild(frag);
+  } else {
+    $('#stbody').innerHTML = arr.map((s, i) => `
+      <tr data-id="${s.id}">
+        <td style="color:var(--l700)" class="tnum">${i+1}</td>
+        <td><span class="cellname"><img src="${esc(s.avatar)}" alt="" loading="lazy"><span>${esc(s.name)}</span></span></td>
+        <td class="num" style="color:var(--p500);font-weight:600">${eur(s.don)}</td>
+        <td class="num">${s.online ? num(s.viewers) : '—'}</td>
+        <td class="num">${s.ratio != null && s.viewers >= 20 ? eur2(s.ratio) : '—'}</td>
+        <td class="num">${pct(s.share, 2)}</td>
+        <td style="color:var(--l500)">${esc(s.game)}</td>
+        <td style="color:var(--l500)">${s.lan ? 'Sur place' : 'À distance'}</td>
+        <td>${s.online ? '<span style="color:var(--p500)">En live</span>' : '<span style="color:var(--l700)">Hors ligne</span>'}</td>
+      </tr>`).join('');
+  }
+  $('#listNote').innerHTML = S.view === 'grid' && arr.length > 400
+    ? `Les 400 premiers résultats sont affichés en grille. Passez en vue tableau ou affinez la recherche pour voir les ${num(arr.length)} correspondances.`
+    : `Rang affiché : position au classement des dons, tous streamers confondus. Part de cagnotte calculée sur le total annoncé (${eur(st.pot)}).`;
+}
+
+function renderGameFilter() {
+  const sel = $('#gameFilter'), cur = sel.value;
+  const games = [...new Set(S.streamers.map(s => s.game).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'fr'));
+  sel.innerHTML = '<option value="">Tous les jeux</option>' + games.map(g => `<option value="${esc(g)}"${g===cur?' selected':''}>${esc(g)}</option>`).join('');
+}
+
+/* ---------- Jeux ---------- */
+function renderGames() {
+  const st = S.stats;
+  $('#gameCount').textContent = `${num(st.gamesN)} catégorie${st.gamesN>1?'s':''} en direct`;
+  if (!st.games.length) { $('#gameList').innerHTML = `<div class="empty">Aucune chaîne en direct actuellement.</div>`; return; }
+  const maxV = Math.max(...st.games.map(g => g.viewers), 1);
+  $('#gameList').innerHTML = st.games.map(g => `
+    <div class="card" style="padding:14px 16px;margin-bottom:4px">
+      <div style="display:flex;justify-content:space-between;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px">
+        <div><span style="font-weight:700;font-size:15px">${esc(g.name)}</span>
+        <span style="font-size:12.5px;color:var(--l600);margin-left:8px">${num(g.n)} chaîne${g.n>1?'s':''}</span></div>
+        <div class="tnum" style="font-size:13px"><span style="color:var(--p500);font-weight:700">${num(g.viewers)}</span>
+        <span style="color:var(--l600)"> viewers · ${eur(g.don)} collectés</span></div>
+      </div>
+      <div class="bar"><i style="width:${(g.viewers/maxV*100).toFixed(2)}%"></i></div>
+      <div style="font-size:11.5px;color:var(--l700);margin-top:7px">
+        ${pct(g.viewers/Math.max(st.sumViewersLive,1),1)} de l'audience en direct ·
+        ${g.list.slice().sort((a,b)=>b.viewers-a.viewers).slice(0,6).map(s=>esc(s.name)).join(', ')}${g.n>6?` et ${g.n-6} autre${g.n-6>1?'s':''}`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ---------- Journal ---------- */
+function renderLog() {
+  const box = $('#log');
+  if (!S.events.length) { box.innerHTML = `<div class="empty">Le journal se remplit dès la deuxième actualisation.</div>`; return; }
+  box.innerHTML = S.events.slice(0, 150).map(e => `
+    <div class="ev ${e.kind}">
+      <span class="tm">${hhmmss(e.t)}</span>
+      <span class="ic">${e.ic}</span>
+      <span class="tx">${e.text}</span>
+    </div>`).join('');
+}
+
+/* ---------- Barre du bas ---------- */
+function renderBottom() {
+  const st = S.stats;
+  $('#bViewers').textContent = num(st.viewers);
+  $('#bPot').textContent = eur(st.pot);
+  $('#bLive').textContent = `${num(st.liveCount)} / ${num(st.total)}`;
+  $('#bDot').className = 'livedot' + (st.liveCount ? '' : ' off');
+}
+
+/* ---------- État réseau ---------- */
+function renderNet() {
+  const rows = [];
+  rows.push(['Source utilisée', S.source ? SOURCES.find(s => s.key === S.source)?.label ?? S.source : (S.forcedSource === 'manual' ? 'JSON collé à la main' : 'aucune')]);
+  rows.push(['Dernière réussite', S.lastOk ? hhmmss(S.lastOk) + ` (il y a ${dur(Date.now() - S.lastOk)})` : 'jamais']);
+  rows.push(['Dernière tentative', S.lastTry ? hhmmss(S.lastTry) : '—']);
+  rows.push(['Temps de réponse', S.lastMs ? S.lastMs + ' ms' : '—']);
+  rows.push(['Actualisation', S.poll ? 'toutes les ' + (S.poll / 1000) + ' s' : 'manuelle']);
+  rows.push(['Lectures réussies', num(S.hist.length)]);
+  rows.push(['Page ouverte depuis', dur(Date.now() - S.openedAt)]);
+  if (S.attempts.length) {
+    rows.push(['Sources interrogées', S.attempts.map(a => {
+      const v = a.state === 'réussi' ? `<span class="up">réussi en ${a.ms} ms</span>`
+        : a.state === 'en cours' ? `<span style="color:var(--l700)">en cours…</span>`
+        : `<span class="down">${esc(a.err || 'échec')}</span>`;
+      return `${a.label} : ${v}`;
+    }).join('<br>')]);
+  }
+  if (S.lastErr) rows.push(['Erreur', `<span class="down">${esc(S.lastErr)}</span>`]);
+  $('#netKv').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+}
+
+function renderSchema() {
+  const d = S.raw; if (!d) return;
+  const s0 = d.live?.[0] || {};
+  const rows = [
+    ['live', `tableau de ${num((d.live||[]).length)} objets streamer`],
+    ['donationAmount', `{ number: ${d.donationAmount.number}, formatted: "${esc(d.donationAmount.formatted)}" }`],
+    ['viewersCount', d.viewersCount ? `{ number: ${d.viewersCount.number}, formatted: "${esc(d.viewersCount.formatted)}" }` : '—'],
+    ['globalDonationUrl', esc(d.globalDonationUrl || '—')],
+    ['streamlabsCampaignId', esc(d.streamlabsCampaignId || '—')],
+    ['websiteMode', esc(d.websiteMode || '—')],
+    ['calendar', `tableau de ${num((d.calendar||[]).length)} entrée(s)`],
+    ['marquee', d.marquee ? esc(JSON.stringify(d.marquee)).slice(0, 160) : 'null'],
+    ['widgetVersionId', String(d.widgetVersionId ?? '—')],
+    ['eventSourceDisabled', String(d.eventSourceDisabled ?? '—')],
+    ['eventSourceWhitelist', esc(JSON.stringify(d.eventSourceWhitelist || []))],
+    ['live[].*', esc(Object.keys(s0).join(', ')) || '—'],
+  ];
+  $('#schemaKv').innerHTML = rows.map(([k, v]) => `<dt><code>${k}</code></dt><dd style="color:var(--l500);font-size:12.5px">${v}</dd>`).join('');
+}
+</script>
+<script>
+"use strict";
+/* ============================================================
+   GRAPHIQUES — SVG généré, aucune dépendance externe
+   ============================================================ */
+
+const SV = (t, a, kids) => {
+  const attrs = Object.entries(a).map(([k, v]) => `${k}="${v}"`).join(' ');
+  return kids != null ? `<${t} ${attrs}>${kids}</${t}>` : `<${t} ${attrs}/>`;
+};
+const AX = '#313131', TX = '#838383';
+
+function renderAnalyses() {
+  drawLorenz();
+  drawPareto();
+  drawScatter();
+  drawHist('#histDon', S.stats.donBins, S.stats.total, eur, 'de la cagnotte attribuée', S.stats.sumDon);
+  drawHist('#histView', S.stats.vwBins, S.stats.liveCount, num, 'de l\'audience', S.stats.sumViewersLive);
+  drawStats();
+}
+
+/* ---------- Lorenz + Gini ---------- */
+function lorenzPath(sortedAsc, W, H, pad) {
+  const n = sortedAsc.length; if (!n) return '';
+  const tot = sortedAsc.reduce((a, b) => a + b, 0) || 1;
+  let acc = 0;
+  const pts = [[pad, H - pad]];
+  for (let i = 0; i < n; i++) {
+    acc += sortedAsc[i];
+    pts.push([pad + (i + 1) / n * (W - pad * 2), H - pad - acc / tot * (H - pad * 2)]);
+  }
+  return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+}
+
+function drawLorenz() {
+  const st = S.stats, W = 420, H = 300, pad = 34;
+  const g = [];
+  for (let i = 0; i <= 4; i++) {
+    const y = pad + i / 4 * (H - pad * 2), x = pad + i / 4 * (W - pad * 2);
+    g.push(SV('line', { x1: pad, y1: y, x2: W - pad, y2: y, stroke: AX, 'stroke-width': .7, 'stroke-dasharray': '2 4' }));
+    g.push(SV('text', { x: pad - 6, y: y + 3.5, fill: TX, 'font-size': 9, 'text-anchor': 'end' }, (100 - i * 25) + '%'));
+    g.push(SV('text', { x, y: H - pad + 14, fill: TX, 'font-size': 9, 'text-anchor': 'middle' }, (i * 25) + '%'));
+  }
+  g.push(SV('line', { x1: pad, y1: H - pad, x2: W - pad, y2: pad, stroke: '#515151', 'stroke-width': 1.2, 'stroke-dasharray': '4 4' }));
+  g.push(SV('path', { d: lorenzPath(st.vwsAsc, W, H, pad), fill: 'none', stroke: '#5B9BFF', 'stroke-width': 1.8, opacity: .85 }));
+  const dp = lorenzPath(st.donsAsc, W, H, pad);
+  g.push(SV('path', { d: dp + ` L${W-pad} ${H-pad} Z`, fill: 'rgba(0,189,0,.11)', stroke: 'none' }));
+  g.push(SV('path', { d: dp, fill: 'none', stroke: '#00BD00', 'stroke-width': 2.2 }));
+  g.push(SV('text', { x: W - pad, y: pad - 10, fill: TX, 'font-size': 9.5, 'text-anchor': 'end' }, 'part cumulée des dons'));
+  g.push(SV('text', { x: W / 2, y: H - 4, fill: TX, 'font-size': 9.5, 'text-anchor': 'middle' }, 'chaînes classées de la plus petite à la plus grosse collecte'));
+  $('#lorenz').innerHTML = g.join('');
+
+  const interpret = v => v < .3 ? 'répartition assez homogène' : v < .5 ? 'déséquilibre modéré' : v < .7 ? 'forte concentration' : 'concentration très marquée';
+  $('#giniKv').innerHTML = [
+    ['Gini des dons', `${nf2.format(st.giniDon)} — ${interpret(st.giniDon)}`],
+    ['Gini des viewers', `${nf2.format(st.giniVw)} — ${interpret(st.giniVw)}`],
+    ['Moitié la moins collectrice', `${pct(st.donsAsc.slice(0, Math.floor(st.donsAsc.length/2)).reduce((a,b)=>a+b,0) / Math.max(st.sumDon,1))} de la cagnotte attribuée`],
+    ['Chaîne la plus haute', `${pct(st.top1)} à elle seule`],
+  ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+}
+
+/* ---------- Pareto ---------- */
+function drawPareto() {
+  const st = S.stats;
+  const rows = [
+    ['Top 1', st.top1], ['Top 3', st.top3], ['Top 5', st.top5],
+    ['Top 10', st.top10], ['Top 20', st.top20], ['Top 50', st.top50], ['Top 100', st.top100],
+  ];
+  $('#paretoBars').innerHTML = barRows(rows.map(([l, v]) => ({
+    label: l + ' des collectes', value: v, text: pct(v), color: 'var(--p500)',
+  })));
+  $('#paretoKv').innerHTML = [
+    ['Moitié de la cagnotte', `${num(st.n50)} chaînes, soit ${pct(st.n50/st.total,0)} de la liste`],
+    ['80 % de la cagnotte', `${num(st.n80)} chaînes, soit ${pct(st.n80/st.total,0)} de la liste`],
+    ['90 % de la cagnotte', `${num(st.n90)} chaînes, soit ${pct(st.n90/st.total,0)} de la liste`],
+    ['Top 10 de l\'audience', `${pct(st.top10Vw)} des viewers en direct`],
+    ['Chaîne la plus regardée', `${pct(st.top1Vw)} de l'audience totale`],
+  ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+}
+
+/* ---------- Nuage de points viewers × dons ---------- */
+function drawScatter() {
+  const W = 420, H = 300, pad = 40;
+  const pts = S.streamers.filter(s => s.online && s.viewers > 0 && s.don > 0);
+  const svg = $('#scatter');
+  if (pts.length < 3) { svg.innerHTML = SV('text', { x: W/2, y: H/2, fill: TX, 'font-size': 12, 'text-anchor': 'middle' }, 'Pas assez de chaînes en direct'); $('#corrKv').innerHTML = ''; return; }
+
+  const lx = pts.map(s => Math.log10(s.viewers)), ly = pts.map(s => Math.log10(s.don));
+  const x0 = Math.floor(Math.min(...lx)), x1 = Math.ceil(Math.max(...lx));
+  const y0 = Math.floor(Math.min(...ly)), y1 = Math.ceil(Math.max(...ly));
+  const sx = v => pad + (Math.log10(v) - x0) / Math.max(x1 - x0, .5) * (W - pad * 2);
+  const sy = v => H - pad - (Math.log10(v) - y0) / Math.max(y1 - y0, .5) * (H - pad * 2);
+  const g = [];
+  for (let i = x0; i <= x1; i++) {
+    const x = sx(10 ** i);
+    g.push(SV('line', { x1: x, y1: pad, x2: x, y2: H - pad, stroke: AX, 'stroke-width': .7, 'stroke-dasharray': '2 4' }));
+    g.push(SV('text', { x, y: H - pad + 14, fill: TX, 'font-size': 9, 'text-anchor': 'middle' }, compact(10 ** i)));
+  }
+  for (let i = y0; i <= y1; i++) {
+    const y = sy(10 ** i);
+    g.push(SV('line', { x1: pad, y1: y, x2: W - pad, y2: y, stroke: AX, 'stroke-width': .7, 'stroke-dasharray': '2 4' }));
+    g.push(SV('text', { x: pad - 6, y: y + 3.5, fill: TX, 'font-size': 9, 'text-anchor': 'end' }, compact(10 ** i) + '€'));
+  }
+  // droite de régression sur les logarithmes
+  const n = lx.length, mx = lx.reduce((a,b)=>a+b,0)/n, my = ly.reduce((a,b)=>a+b,0)/n;
+  let sxy = 0, sxx = 0;
+  for (let i = 0; i < n; i++) { sxy += (lx[i]-mx)*(ly[i]-my); sxx += (lx[i]-mx)**2; }
+  if (sxx > 0) {
+    const b = sxy / sxx, a = my - b * mx;
+    const px0 = x0, px1 = x1;
+    g.push(SV('line', { x1: sx(10**px0), y1: sy(10**(a+b*px0)), x2: sx(10**px1), y2: sy(10**(a+b*px1)), stroke: '#E7B22B', 'stroke-width': 1.4, 'stroke-dasharray': '5 4', opacity: .75 }));
+  }
+  for (const s of pts) {
+    g.push(SV('circle', {
+      cx: sx(s.viewers).toFixed(1), cy: sy(s.don).toFixed(1),
+      r: clamp(2 + Math.log10(s.don) * .75, 2.2, 7).toFixed(1),
+      fill: s.lan ? 'rgba(0,189,0,.62)' : 'rgba(91,155,255,.58)',
+      stroke: s.lan ? '#00BD00' : '#5B9BFF', 'stroke-width': .8,
+      'data-tip': `${esc(s.name)}|${num(s.viewers)} viewers|${eur(s.don)}|${s.ratio!=null?eur2(s.ratio)+' par viewer':''}`,
+      class: 'pt', style: 'cursor:pointer',
+    }));
+  }
+  g.push(SV('text', { x: W/2, y: H - 4, fill: TX, 'font-size': 9.5, 'text-anchor': 'middle' }, 'viewers (échelle log)'));
+  svg.innerHTML = g.join('');
+
+  const st = S.stats;
+  const strength = r => { const a = Math.abs(r); return a < .2 ? 'quasi inexistant' : a < .4 ? 'faible' : a < .6 ? 'modéré' : a < .8 ? 'fort' : 'très fort'; };
+  $('#corrKv').innerHTML = [
+    ['Chaînes retenues', `${num(st.pairsN)} en live, avec viewers et dons non nuls`],
+    ['Pearson (valeurs brutes)', st.pearson != null ? `${nf2.format(st.pearson)} — lien ${strength(st.pearson)}` : '—'],
+    ['Pearson (échelles log)', st.pearsonLog != null ? `${nf2.format(st.pearsonLog)} — lien ${strength(st.pearsonLog)}` : '—'],
+    ['Spearman (rangs)', st.spearman != null ? `${nf2.format(st.spearman)} — lien ${strength(st.spearman)}` : '—'],
+  ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  $('#corrNote').innerHTML = `Une corrélation mesure une association, pas une cause. Les dons se cumulent depuis le début de l'événement alors que les viewers ne sont qu'un instantané : cet écart de nature explique une partie de la dispersion visible.`;
+}
+
+/* ---------- Histogrammes ---------- */
+function drawHist(sel, bins, totalN, fmt, whatLabel, totalSum) {
+  const maxN = Math.max(...bins.map(b => b.n), 1);
+  $(sel).innerHTML = bins.map(b => {
+    const shareN = totalN ? b.n / totalN : 0;
+    const shareS = totalSum ? b.sum / totalSum : 0;
+    return `<div style="margin-bottom:11px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;gap:10px">
+        <span style="font-weight:600">${b.label}</span>
+        <span class="tnum" style="flex:none"><b style="color:var(--p500)">${num(b.n)}</b><span style="color:var(--l600)"> chaîne${b.n>1?'s':''}</span></span>
+      </div>
+      <div class="bar"><i style="width:${(b.n/maxN*100).toFixed(2)}%"></i></div>
+      <div style="font-size:11px;color:var(--l700);margin-top:3px">${pct(shareN,1)} des chaînes · ${fmt(b.sum)} cumulés, soit ${pct(shareS,1)} ${whatLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- Boîte à moustaches + stats de position ---------- */
+function drawStats() {
+  const st = S.stats;
+  $('#statKv').innerHTML = [
+    ['Don moyen', eur2(st.meanDon)],
+    ['Don médian', eur2(st.medDon)],
+    ['Écart moyenne / médiane', st.medDon > 0 ? `× ${nf1.format(st.meanDon/st.medDon)}` : '—'],
+    ['Premier quartile', eur(st.q1Don) + ' — un quart des chaînes est en dessous'],
+    ['Troisième quartile', eur(st.q3Don) + ' — un quart est au dessus'],
+    ['Neuvième décile', eur(st.p90Don)],
+    ['Écart type', eur(st.sdDon)],
+    ['Minimum / maximum', `${eur(st.minDon)} → ${eur(st.maxDon)}`],
+    ['Viewers médians (live)', num(st.medVw) + ` · quartiles ${num(st.q1Vw)} et ${num(st.q3Vw)}`],
+    ['Chaînes en live sans viewer', num(st.liveNoViewer)],
+  ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+
+  const W = 420, H = 160, pad = 40, y = 66, bh = 32;
+  const L = v => Math.log10(Math.max(v, 0) + 1);
+  const lmax = L(st.maxDon) || 1;
+  const sx = v => pad + L(v) / lmax * (W - pad * 2);
+  const g = [];
+  // graduations décimales
+  for (let e = 0; e <= Math.ceil(lmax); e++) {
+    const v = 10 ** e; if (v > st.maxDon * 1.6) break;
+    const x = sx(v);
+    g.push(SV('line', { x1: x, y1: 26, x2: x, y2: H - 30, stroke: AX, 'stroke-width': .7, 'stroke-dasharray': '2 4' }));
+    g.push(SV('text', { x, y: H - 18, fill: TX, 'font-size': 9, 'text-anchor': 'middle' }, compact(v) + '€'));
+  }
+  g.push(SV('line', { x1: sx(st.minDon), y1: y + bh / 2, x2: sx(st.maxDon), y2: y + bh / 2, stroke: '#515151', 'stroke-width': 1.3 }));
+  for (const v of [st.minDon, st.maxDon]) {
+    g.push(SV('line', { x1: sx(v), y1: y + 6, x2: sx(v), y2: y + bh - 6, stroke: '#515151', 'stroke-width': 1.3 }));
+  }
+  g.push(SV('rect', { x: sx(st.q1Don), y, width: Math.max(sx(st.q3Don) - sx(st.q1Don), 2), height: bh, fill: 'rgba(0,189,0,.2)', stroke: '#00BD00', 'stroke-width': 1.4, rx: 3 }));
+  g.push(SV('line', { x1: sx(st.medDon), y1: y - 3, x2: sx(st.medDon), y2: y + bh + 3, stroke: '#00BD00', 'stroke-width': 2.6 }));
+  g.push(SV('line', { x1: sx(st.meanDon), y1: y - 3, x2: sx(st.meanDon), y2: y + bh + 3, stroke: '#E7B22B', 'stroke-width': 1.8, 'stroke-dasharray': '3 3' }));
+  const lab = (v, txt, yy, col) => {
+    const x = clamp(sx(v), 26, W - 26);
+    g.push(SV('text', { x, y: yy, fill: col, 'font-size': 9.5, 'text-anchor': 'middle' }, txt));
+  };
+  lab(st.medDon, 'médiane ' + compact(st.medDon) + '€', y - 22, '#00BD00');
+  lab(st.meanDon, 'moyenne ' + compact(st.meanDon) + '€', y - 9, '#E7B22B');
+  lab(st.q1Don, 'Q1', y + bh + 12, TX);
+  lab(st.q3Don, 'Q3', y + bh + 12, TX);
+  lab(st.maxDon, 'max', y + bh + 12, TX);
+  g.push(SV('text', { x: W / 2, y: 14, fill: TX, 'font-size': 9.5, 'text-anchor': 'middle' }, 'dons par chaîne, échelle logarithmique'));
+  $('#box').innerHTML = g.join('');
+}
+
+/* ---------- Courbes de session ---------- */
+function lineChart(sel, key, color, fmt, label) {
+  const svg = $(sel), h = S.hist, W = 640, H = 220, pad = 46;
+  if (h.length < 2) { svg.innerHTML = SV('text', { x: W/2, y: H/2, fill: TX, 'font-size': 12, 'text-anchor': 'middle' }, 'En attente d\'une deuxième lecture'); return; }
+  const vals = h.map(x => x[key]);
+  let min = Math.min(...vals), max = Math.max(...vals);
+  if (min === max) { min -= 1; max += 1; }
+  const t0 = h[0].t, tSpan = Math.max(h[h.length-1].t - t0, 1);
+  const sx = t => pad + (t - t0) / tSpan * (W - pad - 12);
+  const sy = v => H - 30 - (v - min) / (max - min) * (H - 30 - 18);
+  const g = [];
+  for (let i = 0; i <= 3; i++) {
+    const v = min + (max - min) * i / 3, y = sy(v);
+    g.push(SV('line', { x1: pad, y1: y, x2: W - 12, y2: y, stroke: AX, 'stroke-width': .7, 'stroke-dasharray': '2 4' }));
+    g.push(SV('text', { x: pad - 6, y: y + 3.5, fill: TX, 'font-size': 9, 'text-anchor': 'end' }, fmt(v)));
+  }
+  const pts = h.map(x => [sx(x.t), sy(x[key])]);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  g.push(SV('path', { d: d + ` L${pts[pts.length-1][0].toFixed(1)} ${H-30} L${pts[0][0].toFixed(1)} ${H-30} Z`, fill: color, opacity: .13 }));
+  g.push(SV('path', { d, fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+  g.push(SV('circle', { cx: pts[pts.length-1][0].toFixed(1), cy: pts[pts.length-1][1].toFixed(1), r: 3.5, fill: color }));
+  for (const i of [0, h.length - 1]) {
+    g.push(SV('text', { x: clamp(pts[i][0], pad + 14, W - 28), y: H - 12, fill: TX, 'font-size': 9, 'text-anchor': 'middle' }, hhmmss(h[i].t)));
+  }
+  const delta = vals[vals.length-1] - vals[0];
+  g.push(SV('text', { x: W - 12, y: 14, fill: delta >= 0 ? '#00BD00' : '#EF4444', 'font-size': 11, 'text-anchor': 'end', 'font-weight': 700 },
+    (delta >= 0 ? '+' : '') + fmt(delta) + ' ' + label));
+  svg.innerHTML = g.join('');
+}
+function renderSessionCharts() {
+  lineChart('#histChart', 'pot', '#00BD00', v => compact(v) + '€', 'sur la session');
+  lineChart('#viewChart', 'viewers', '#5B9BFF', compact, 'sur la session');
+}
+</script>
+<script>
+"use strict";
+/* ============================================================
+   INTERACTIONS
+   ============================================================ */
+
+/* ---------- Fiche streamer ---------- */
+function openStreamer(id) {
+  const s = S.byId.get(id); if (!s) return;
+  const st = S.stats;
+  const rank = arr => arr.findIndex(x => x.id === s.id) + 1;
+  const lanRank = rank(S.streamers.filter(x => x.lan === s.lan).sort((a, b) => b.don - a.don));
+  const ratioRank = s.ratio != null && s.viewers >= 50 ? rank(st.bestRatio) : 0;
+  const stat = (k, v, d) => `<div class="tile"><div class="t">${k}</div><div class="n sm">${v}</div>${d?`<div class="h">${d}</div>`:''}</div>`;
+
+  $('#modal').innerHTML = `
+    <div class="mhead">
+      <img src="${esc(s.avatar)}" alt="">
+      <div style="min-width:0">
+        <div class="n" id="mName">${esc(s.name)}</div>
+        <div class="u">twitch.tv/${esc(s.login)} · ${s.lan ? 'sur place à la LAN' : 'à distance'} · ${s.online ? '<span style="color:var(--p500)">en live sur ' + esc(s.game) + '</span>' : 'hors ligne'}</div>
+      </div>
+      <button class="close" id="mClose" aria-label="Fermer">×</button>
+    </div>
+    <div class="mstats">
+      ${stat('Collecté', eur2(s.don), `rang ${s.rankDon} sur ${num(st.total)}`)}
+      ${stat('Viewers', s.online ? num(s.viewers) : 'hors ligne', s.online ? `rang ${s.rankViewers}` : '')}
+      ${stat('Part de la cagnotte', pct(s.share, s.share >= .01 ? 2 : 3), `sur ${eur(st.pot)}`)}
+      ${stat('€ par viewer', s.ratio != null && s.viewers > 0 ? eur2(s.ratio) : '—', ratioRank ? `rang ${ratioRank} des chaînes de plus de 50 viewers` : 'audience trop faible pour être significatif')}
+      ${stat('Rang ' + (s.lan ? 'à la LAN' : 'à distance'), lanRank + ' / ' + num(s.lan ? st.lanCount : st.onlCount), '')}
+      ${stat('Écart à la moyenne', st.meanDon > 0 ? '× ' + nf1.format(s.don / st.meanDon) : '—', `moyenne : ${eur(st.meanDon)}`)}
+      ${stat('Écart à la médiane', st.medDon > 0 ? '× ' + nf1.format(s.don / st.medDon) : '—', `médiane : ${eur(st.medDon)}`)}
+      ${stat('Depuis l\'ouverture', s.sessDon > 0 ? '+' + eur2(s.sessDon) : '—', s.sessRank ? `${s.sessRank > 0 ? 'gagne' : 'perd'} ${Math.abs(s.sessRank)} place${Math.abs(s.sessRank)>1?'s':''}` : 'rang inchangé')}
+    </div>
+    <dl class="kv" style="margin-bottom:16px">
+      <dt>Identifiant Twitch</dt><dd>${esc(s.id)}</dd>
+      <dt>Identifiant Streamlabs</dt><dd>${esc(s.streamlabsId || '—')}</dd>
+      <dt>Référence ZEVENT</dt><dd>${esc(s.ref || '—')}</dd>
+      <dt>Catégorie diffusée</dt><dd>${esc(s.game)}</dd>
+      <dt>Écart au premier</dt><dd>${eur(Math.max(st.maxDon - s.don, 0))}</dd>
+    </dl>
+    <div class="mlinks">
+      <a class="btn sm p" href="https://www.twitch.tv/${esc(s.login)}" target="_blank" rel="noopener">Regarder sur Twitch</a>
+      <a class="btn sm g" href="${esc(s.donUrl || 'https://zevent.fr/don')}" target="_blank" rel="noopener">Soutenir cette chaîne</a>
+      <a class="btn sm" href="https://zevent.fr/stream/${esc(s.login)}" target="_blank" rel="noopener">Page ZEVENT</a>
+    </div>
+    <p class="note">Toutes ces valeurs viennent de la lecture de ${hhmmss(S.lastOk)}. Les rangs sont recalculés à chaque actualisation.</p>`;
+
+  $('#ovl').classList.add('open');
+  $('#mClose').onclick = closeModal;
+  $('#mClose').focus();
+}
+function closeModal() { $('#ovl').classList.remove('open'); }
+
+/* ---------- Infobulle du nuage de points ---------- */
+const tip = $('#tip');
+document.addEventListener('mouseover', e => {
+  const t = e.target.closest?.('[data-tip]');
+  if (!t) return;
+  const [n, a, b, c] = t.getAttribute('data-tip').split('|');
+  tip.innerHTML = `<b>${n}</b><br>${a}<br>${b}${c ? '<br>' + c : ''}`;
+  tip.style.opacity = '1';
+});
+document.addEventListener('mousemove', e => {
+  if (tip.style.opacity !== '1') return;
+  tip.style.left = Math.min(e.clientX + 14, innerWidth - 260) + 'px';
+  tip.style.top = Math.min(e.clientY + 14, innerHeight - 90) + 'px';
+});
+document.addEventListener('mouseout', e => { if (e.target.closest?.('[data-tip]')) tip.style.opacity = '0'; });
+
+/* ---------- Clics globaux ---------- */
+document.addEventListener('click', e => {
+  const row = e.target.closest('.srow, .pod, #stbody tr');
+  if (row?.dataset.id) { openStreamer(row.dataset.id); return; }
+  if (e.target === $('#ovl')) closeModal();
+
+  const rk = e.target.closest('#rankChips [data-rank]');
+  if (rk) {
+    S.rankMode = rk.dataset.rank;
+    $$('#rankChips [data-rank]').forEach(b => b.setAttribute('aria-pressed', String(b === rk)));
+    renderRankings();
+  }
+  const loc = e.target.closest('[data-loc]');
+  if (loc) {
+    S.filters.loc = loc.dataset.loc;
+    $$('[data-loc]').forEach(b => b.setAttribute('aria-pressed', String(b === loc)));
+    renderList();
+  }
+  const stt = e.target.closest('[data-st]');
+  if (stt) {
+    S.filters.st = stt.dataset.st;
+    $$('[data-st]').forEach(b => b.setAttribute('aria-pressed', String(b === stt)));
+    renderList();
+  }
+  const th = e.target.closest('thead th[data-sort]');
+  if (th) {
+    const k = th.dataset.sort;
+    const asc = { don: 'donAsc', viewers: 'viewersAsc', name: 'nameDesc' };
+    S.sort = S.sort === k && asc[k] ? asc[k] : k;
+    $('#sortSel').value = ['don','donAsc','viewers','viewersAsc','ratio','name','nameDesc'].includes(S.sort) ? S.sort : 'don';
+    $$('thead th').forEach(x => { x.classList.remove('act'); const a = x.querySelector('.ar'); if (a) a.textContent = '↕'; });
+    th.classList.add('act');
+    const ar = th.querySelector('.ar'); if (ar) ar.textContent = S.sort.endsWith('Asc') || S.sort === 'nameDesc' ? '↑' : '↓';
+    renderList();
+  }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ---------- Contrôles ---------- */
+let qTimer;
+$('#q').addEventListener('input', e => {
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => { S.filters.q = e.target.value; renderList(); }, 130);
+});
+$('#gameFilter').addEventListener('change', e => { S.filters.game = e.target.value; renderList(); });
+$('#sortSel').addEventListener('change', e => { S.sort = e.target.value; renderList(); });
+$('#viewGrid').addEventListener('click', () => setView('grid'));
+$('#viewTable').addEventListener('click', () => setView('table'));
+function setView(v) {
+  S.view = v;
+  $('#viewGrid').setAttribute('aria-pressed', String(v === 'grid'));
+  $('#viewTable').setAttribute('aria-pressed', String(v === 'table'));
+  $('#gridWrap').style.display = v === 'grid' ? '' : 'none';
+  $('#tableWrap').style.display = v === 'table' ? '' : 'none';
+  renderList();
+}
+$('#logClear').addEventListener('click', () => { S.events = []; renderLog(); });
+for (const id of ['#btnRefresh', '#btnRefresh2', '#bRefresh']) $(id).addEventListener('click', () => fetchData(true));
+$('#pollSel').addEventListener('change', e => {
+  S.poll = Number(e.target.value);
+  store.set('ze.poll', e.target.value);
+  scheduleNext(); renderNet();
+});
+$('#srcSel').addEventListener('change', e => {
+  S.forcedSource = e.target.value;
+  store.set('ze.src', e.target.value);
+  if (S.forcedSource !== 'manual') fetchData(true); else { setStatus('warn', 'JSON manuel'); renderNet(); }
+});
+
+/* ---------- Chargement manuel ---------- */
+function loadManual(txt) {
+  try {
+    const d = JSON.parse(txt);
+    if (!validPayload(d)) throw new Error('Structure inattendue : il manque « live » ou « donationAmount ».');
+    S.source = 'manual'; S.lastOk = Date.now(); S.lastErr = null; S.lastMs = 0;
+    applyData(d, 'JSON manuel');
+    saveSnapshot(d);
+    hideFallback();
+    pushEvent('sys', '↧', 'JSON chargé manuellement.');
+    renderLog();
+    return true;
+  } catch (err) {
+    S.lastErr = 'JSON invalide : ' + err.message;
+    setStatus('err', 'JSON invalide');
+    renderNet();
+    alert('Ce JSON n\'a pas pu être lu.\n\n' + err.message);
+    return false;
+  }
+}
+$('#manualLoad').addEventListener('click', () => {
+  const v = $('#manualIn').value.trim();
+  if (!v) { alert('Collez d\'abord le contenu de https://zevent.fr/api/ dans la zone de texte.'); return; }
+  if (loadManual(v)) { $('#srcSel').value = 'manual'; S.forcedSource = 'manual'; }
+});
+$('#clipPaste').addEventListener('click', pasteFromClipboard);
+$('#customSave').addEventListener('click', () => {
+  const v = $('#customIn').value.trim();
+  store.set('ze.custom', v);
+  flashBtn($('#customSave'), v ? 'Enregistré' : 'Effacé');
+  fetchData(true);
+});
+$('#filePick').addEventListener('click', () => $('#fileIn').click());
+$('#fileIn').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { if (loadManual(String(r.result))) { $('#srcSel').value = 'manual'; S.forcedSource = 'manual'; } };
+  r.readAsText(f);
+});
+
+/* ---------- Exports ---------- */
+function download(name, text, mime) {
+  const b = new Blob([text], { type: mime + ';charset=utf-8' });
+  const u = URL.createObjectURL(b), a = document.createElement('a');
+  a.href = u; a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+const stamp = () => new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
+const csvCell = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+
+$('#expCsv').addEventListener('click', () => {
+  const head = ['rang_dons','rang_viewers','nom','login','twitch_id','dons_eur','viewers','euros_par_viewer','part_cagnotte_pct','jeu','lieu','en_live','url_don','ref'];
+  const rows = [...S.streamers].sort((a, b) => a.rankDon - b.rankDon).map(s => [
+    s.rankDon, s.rankViewers, s.name, s.login, s.id,
+    s.don.toFixed(2), s.viewers, s.ratio != null ? s.ratio.toFixed(4) : '',
+    (s.share * 100).toFixed(4), s.game, s.lan ? 'LAN' : 'Online', s.online ? 'oui' : 'non', s.donUrl, s.ref,
+  ].map(csvCell).join(';'));
+  download(`zevent-2026-streamers-${stamp()}.csv`, '\uFEFF' + head.join(';') + '\n' + rows.join('\n'), 'text/csv');
+});
+
+$('#expJson').addEventListener('click', () => {
+  download(`zevent-2026-snapshot-${stamp()}.json`, JSON.stringify({
+    genere_le: new Date().toISOString(),
+    source: S.source, api: API,
+    totaux: {
+      cagnotte: S.stats.pot, viewers: S.stats.viewers,
+      chaines: S.stats.total, en_live: S.stats.liveCount,
+      dons_attribues: S.stats.sumDon, dons_cagnotte_globale: S.stats.unattributed,
+    },
+    indicateurs: {
+      gini_dons: S.stats.giniDon, gini_viewers: S.stats.giniVw,
+      part_top10: S.stats.top10, chaines_pour_50pct: S.stats.n50,
+      don_moyen: S.stats.meanDon, don_median: S.stats.medDon,
+      pearson_viewers_dons: S.stats.pearson, spearman_viewers_dons: S.stats.spearman,
+    },
+    streamers: S.streamers.map(s => ({
+      nom: s.name, login: s.login, twitch_id: s.id, dons: s.don, viewers: s.viewers,
+      rang_dons: s.rankDon, rang_viewers: s.rankViewers, euros_par_viewer: s.ratio,
+      part_cagnotte: s.share, jeu: s.game, lieu: s.location, en_live: s.online,
+    })),
+    reponse_api_brute: S.raw,
+  }, null, 2), 'application/json');
+});
+
+$('#expHist').addEventListener('click', () => {
+  if (S.hist.length < 2) { alert('L\'historique de session ne contient pas encore assez de points.'); return; }
+  const rows = S.hist.map(h => [new Date(h.t).toISOString(), h.pot.toFixed(2), h.viewers, h.live].join(';'));
+  download(`zevent-2026-session-${stamp()}.csv`, '\uFEFF' + 'horodatage;cagnotte_eur;viewers;chaines_en_live\n' + rows.join('\n'), 'text/csv');
+});
+
+$('#copyStats').addEventListener('click', async () => {
+  const st = S.stats;
+  const txt = [
+    `ZEVENT 2026 — instantané du ${new Date().toLocaleString('fr-FR')}`,
+    `Cagnotte : ${eur2(st.pot)}`,
+    `Viewers cumulés : ${num(st.viewers)}`,
+    `Chaînes : ${num(st.total)} inscrites, ${num(st.liveCount)} en live`,
+    `Dons attribués : ${eur(st.sumDon)} (${pct(st.attrShare)}) — cagnotte globale : ${eur(Math.max(st.unattributed,0))}`,
+    `Don moyen : ${eur(st.meanDon)} · médian : ${eur(st.medDon)}`,
+    `Gini des dons : ${nf2.format(st.giniDon)} · top 10 = ${pct(st.top10)}`,
+    `${num(st.n50)} chaînes suffisent à atteindre la moitié de la cagnotte`,
+    `Source : ${API}`,
+  ].join('\n');
+  try { await navigator.clipboard.writeText(txt); flashBtn($('#copyStats'), 'Copié'); }
+  catch { download(`zevent-resume-${stamp()}.txt`, txt, 'text/plain'); }
+});
+function flashBtn(b, t) { const o = b.textContent; b.textContent = t; setTimeout(() => b.textContent = o, 1600); }
+
+/* ---------- Planification et compte à rebours ---------- */
+function scheduleNext() {
+  clearTimeout(S.timer);
+  if (!S.poll) { S.nextAt = 0; $('#bCd').textContent = 'manuel'; $('#ring').style.strokeDashoffset = 0; return; }
+  S.nextAt = Date.now() + S.poll;
+  S.timer = setTimeout(() => fetchData(false), S.poll);
+}
+setInterval(() => {
+  if (S.nextAt) {
+    const left = Math.max(0, S.nextAt - Date.now());
+    $('#bCd').textContent = Math.ceil(left / 1000) + ' s';
+    $('#ring').style.strokeDashoffset = (50.3 * (1 - left / S.poll)).toFixed(1);
+  }
+  if (S.lastOk) {
+    renderNet();
+    if (S.stats?.rate) { $('#kRateD').innerHTML = `Session de ${dur(Date.now() - S.openedAt)}` + (S.stats.rateWin ? ` · ${eur(S.stats.rateWin*60)}/min sur 10 min` : ''); }
+  }
+}, 1000);
+
+/* Suspendre le polling quand l'onglet est masqué, relancer au retour */
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { clearTimeout(S.timer); }
+  else if (S.poll && S.forcedSource !== 'manual') {
+    const stale = Date.now() - S.lastOk > S.poll;
+    stale ? fetchData(false) : scheduleNext();
+  }
+});
+
+/* ---------- Navigation : surlignage de la section active ---------- */
+const secs = ['resume','classements','streamers','analyses','jeux','direct','donnees'];
+const spy = new IntersectionObserver(es => {
+  for (const e of es) {
+    if (e.isIntersecting) {
+      $$('nav.main a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+    }
+  }
+}, { rootMargin: '-30% 0px -60% 0px' });
+secs.forEach(id => { const n = document.getElementById(id); if (n) spy.observe(n); });
+
+/* ---------- Démarrage ---------- */
+(function init() {
+  const p = store.get('ze.poll'); if (p !== null) { S.poll = Number(p); $('#pollSel').value = p; }
+  const sc = store.get('ze.src'); if (sc) { S.forcedSource = sc; $('#srcSel').value = sc; }
+  const cu = store.get('ze.custom'); if (cu) $('#customIn').value = cu;
+  setStatus('warn', 'Connexion…');
+
+  // Afficher tout de suite le dernier instantané connu, puis rafraîchir.
+  const snap = loadSnapshot();
+  if (snap) {
+    try {
+      applyData(snap.d, 'instantané enregistré');
+      S.lastOk = snap.t;
+      setStatus('warn', 'Instantané du ' + hhmmss(snap.t));
+      pushEvent('sys', '↺', `Instantané du ${hhmmss(snap.t)} restauré en attendant la première réponse.`);
+      renderLog();
+    } catch {}
+  }
+  fetchData(true);
+})();
+</script>
+</body>
+</html>
